@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TextbookOrderRequestsMapper">
+    
+    <resultMap type="TextbookOrderRequests" id="TextbookOrderRequestsResult">
+        <result property="requestId"    column="request_id"    />
+        <result property="teacherId"    column="teacher_id"    />
+        <result property="textbookId"    column="textbook_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="classId"    column="class_id"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="status"    column="status"    />
+        <result property="collegeId"    column="college_id"    />
+        <result property="submittedAt"    column="submitted_at"    />
+        <result property="reviewedBy"    column="reviewed_by"    />
+        <result property="reviewedAt"    column="reviewed_at"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectTextbookOrderRequestsVo">
+        select request_id, teacher_id, textbook_id, course_name, class_id, quantity, status, college_id, submitted_at, reviewed_by, reviewed_at, remarks from textbook_order_requests
+    </sql>
+
+    <select id="selectTextbookOrderRequestsList" parameterType="TextbookOrderRequests" resultMap="TextbookOrderRequestsResult">
+        <include refid="selectTextbookOrderRequestsVo"/>
+        <where>  
+            <if test="teacherId != null "> and teacher_id = #{teacherId}</if>
+            <if test="textbookId != null "> and textbook_id = #{textbookId}</if>
+            <if test="courseName != null  and courseName != ''"> and course_name like concat('%', #{courseName}, '%')</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="collegeId != null "> and college_id = #{collegeId}</if>
+            <if test="submittedAt != null "> and submitted_at = #{submittedAt}</if>
+            <if test="reviewedBy != null "> and reviewed_by = #{reviewedBy}</if>
+            <if test="reviewedAt != null "> and reviewed_at = #{reviewedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectTextbookOrderRequestsByRequestId" parameterType="Long" resultMap="TextbookOrderRequestsResult">
+        <include refid="selectTextbookOrderRequestsVo"/>
+        where request_id = #{requestId}
+    </select>
+
+    <insert id="insertTextbookOrderRequests" parameterType="TextbookOrderRequests" useGeneratedKeys="true" keyProperty="requestId">
+        insert into textbook_order_requests
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="textbookId != null">textbook_id,</if>
+            <if test="courseName != null and courseName != ''">course_name,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="quantity != null and quantity != ''">quantity,</if>
+            <if test="status != null">status,</if>
+            <if test="collegeId != null">college_id,</if>
+            <if test="submittedAt != null">submitted_at,</if>
+            <if test="reviewedBy != null">reviewed_by,</if>
+            <if test="reviewedAt != null">reviewed_at,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="textbookId != null">#{textbookId},</if>
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="quantity != null and quantity != ''">#{quantity},</if>
+            <if test="status != null">#{status},</if>
+            <if test="collegeId != null">#{collegeId},</if>
+            <if test="submittedAt != null">#{submittedAt},</if>
+            <if test="reviewedBy != null">#{reviewedBy},</if>
+            <if test="reviewedAt != null">#{reviewedAt},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTextbookOrderRequests" parameterType="TextbookOrderRequests">
+        update textbook_order_requests
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teacherId != null">teacher_id = #{teacherId},</if>
+            <if test="textbookId != null">textbook_id = #{textbookId},</if>
+            <if test="courseName != null and courseName != ''">course_name = #{courseName},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="quantity != null and quantity != ''">quantity = #{quantity},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="collegeId != null">college_id = #{collegeId},</if>
+            <if test="submittedAt != null">submitted_at = #{submittedAt},</if>
+            <if test="reviewedBy != null">reviewed_by = #{reviewedBy},</if>
+            <if test="reviewedAt != null">reviewed_at = #{reviewedAt},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where request_id = #{requestId}
+    </update>
+
+    <delete id="deleteTextbookOrderRequestsByRequestId" parameterType="Long">
+        delete from textbook_order_requests where request_id = #{requestId}
+    </delete>
+
+    <delete id="deleteTextbookOrderRequestsByRequestIds" parameterType="String">
+        delete from textbook_order_requests where request_id in 
+        <foreach item="requestId" collection="array" open="(" separator="," close=")">
+            #{requestId}
+        </foreach>
+    </delete>
+</mapper>

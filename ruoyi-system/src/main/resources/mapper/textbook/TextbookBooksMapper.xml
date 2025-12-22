@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TextbookBooksMapper">
+    
+    <resultMap type="TextbookBooks" id="TextbookBooksResult">
+        <result property="textbookId"    column="textbook_id"    />
+        <result property="picture"    column="picture"    />
+        <result property="isbn"    column="isbn"    />
+        <result property="title"    column="title"    />
+        <result property="author"    column="author"    />
+        <result property="publisherId"    column="publisher_id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="edition"    column="edition"    />
+        <result property="price"    column="price"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectTextbookBooksVo">
+        select textbook_id, picture, isbn, title, author, publisher_id, category_id, edition, price, created_by, created_at from textbook_books
+    </sql>
+
+    <select id="selectTextbookBooksList" parameterType="TextbookBooks" resultMap="TextbookBooksResult">
+        <include refid="selectTextbookBooksVo"/>
+        <where>  
+            <if test="isbn != null  and isbn != ''"> and isbn = #{isbn}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="author != null  and author != ''"> and author like concat('%', #{author}, '%')</if>
+            <if test="publisherId != null "> and publisher_id like concat('%', #{publisherId}, '%')</if>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="params.beginPrice != null and params.beginPrice != '' and params.endPrice != null and params.endPrice != ''"> and price between #{params.beginPrice} and #{params.endPrice}</if>
+        </where>
+    </select>
+    
+    <select id="selectTextbookBooksByTextbookId" parameterType="Long" resultMap="TextbookBooksResult">
+        <include refid="selectTextbookBooksVo"/>
+        where textbook_id = #{textbookId}
+    </select>
+
+    <insert id="insertTextbookBooks" parameterType="TextbookBooks" useGeneratedKeys="true" keyProperty="textbookId">
+        insert into textbook_books
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="picture != null">picture,</if>
+            <if test="isbn != null and isbn != ''">isbn,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="author != null">author,</if>
+            <if test="publisherId != null">publisher_id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="edition != null and edition != ''">edition,</if>
+            <if test="price != null">price,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="picture != null">#{picture},</if>
+            <if test="isbn != null and isbn != ''">#{isbn},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="author != null">#{author},</if>
+            <if test="publisherId != null">#{publisherId},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="edition != null and edition != ''">#{edition},</if>
+            <if test="price != null">#{price},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTextbookBooks" parameterType="TextbookBooks">
+        update textbook_books
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="isbn != null and isbn != ''">isbn = #{isbn},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="author != null">author = #{author},</if>
+            <if test="publisherId != null">publisher_id = #{publisherId},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="edition != null and edition != ''">edition = #{edition},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where textbook_id = #{textbookId}
+    </update>
+
+    <delete id="deleteTextbookBooksByTextbookId" parameterType="Long">
+        delete from textbook_books where textbook_id = #{textbookId}
+    </delete>
+
+    <delete id="deleteTextbookBooksByTextbookIds" parameterType="String">
+        delete from textbook_books where textbook_id in 
+        <foreach item="textbookId" collection="array" open="(" separator="," close=")">
+            #{textbookId}
+        </foreach>
+    </delete>
+</mapper>

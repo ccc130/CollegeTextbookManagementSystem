@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TextbookStockLogsMapper">
+    
+    <resultMap type="TextbookStockLogs" id="TextbookStockLogsResult">
+        <result property="logId"    column="log_id"    />
+        <result property="textbookId"    column="textbook_id"    />
+        <result property="operation"    column="operation"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="operatorId"    column="operator_id"    />
+        <result property="relatedRequestId"    column="related_request_id"    />
+        <result property="notes"    column="notes"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectTextbookStockLogsVo">
+        select log_id, textbook_id, operation, quantity, operator_id, related_request_id, notes, created_at from textbook_stock_logs
+    </sql>
+
+    <select id="selectTextbookStockLogsList" parameterType="TextbookStockLogs" resultMap="TextbookStockLogsResult">
+        <include refid="selectTextbookStockLogsVo"/>
+        <where>  
+            <if test="textbookId != null "> and textbook_id = #{textbookId}</if>
+            <if test="operation != null "> and operation = #{operation}</if>
+            <if test="operatorId != null "> and operator_id = #{operatorId}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectTextbookStockLogsByLogId" parameterType="Long" resultMap="TextbookStockLogsResult">
+        <include refid="selectTextbookStockLogsVo"/>
+        where log_id = #{logId}
+    </select>
+
+    <insert id="insertTextbookStockLogs" parameterType="TextbookStockLogs" useGeneratedKeys="true" keyProperty="logId">
+        insert into textbook_stock_logs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="textbookId != null">textbook_id,</if>
+            <if test="operation != null">operation,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="operatorId != null">operator_id,</if>
+            <if test="relatedRequestId != null">related_request_id,</if>
+            <if test="notes != null">notes,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="textbookId != null">#{textbookId},</if>
+            <if test="operation != null">#{operation},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="operatorId != null">#{operatorId},</if>
+            <if test="relatedRequestId != null">#{relatedRequestId},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTextbookStockLogs" parameterType="TextbookStockLogs">
+        update textbook_stock_logs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="textbookId != null">textbook_id = #{textbookId},</if>
+            <if test="operation != null">operation = #{operation},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="operatorId != null">operator_id = #{operatorId},</if>
+            <if test="relatedRequestId != null">related_request_id = #{relatedRequestId},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where log_id = #{logId}
+    </update>
+
+    <delete id="deleteTextbookStockLogsByLogId" parameterType="Long">
+        delete from textbook_stock_logs where log_id = #{logId}
+    </delete>
+
+    <delete id="deleteTextbookStockLogsByLogIds" parameterType="String">
+        delete from textbook_stock_logs where log_id in 
+        <foreach item="logId" collection="array" open="(" separator="," close=")">
+            #{logId}
+        </foreach>
+    </delete>
+</mapper>
