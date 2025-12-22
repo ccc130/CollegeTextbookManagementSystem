@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="教材" prop="textbookId">
-        <el-input
-          v-model="queryParams.textbookId"
-          placeholder="请输入教材"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.textbookId" placeholder="请选择教材" clearable filterable>
+          <el-option
+            v-for="item in textbookOptions"
+            :key="item.textbookId"
+            :label="item.title"
+            :value="item.textbookId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -60,7 +62,13 @@
     <el-table v-loading="loading" :data="inventoryList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="库存记录ID" align="center" prop="inventoryId" />
-      <el-table-column label="教材" align="center" prop="textbookId" />
+      <el-table-column label="教材" align="center" prop="textbookId">
+        <template #default="scope">
+          <span v-for="textbook in textbookOptions" :key="textbook.textbookId">
+            <span v-if="textbook.textbookId === scope.row.textbookId">{{ textbook.title }}</span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="总数量" align="center" prop="totalQuantity" />
       <el-table-column label="可领用数量" align="center" prop="availableQuantity" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -83,13 +91,20 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="inventoryRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="教材" prop="textbookId">
-          <el-input v-model="form.textbookId" placeholder="请输入教材" />
+          <el-select v-model="form.textbookId" placeholder="请选择教材" clearable filterable>
+            <el-option
+              v-for="item in textbookOptions"
+              :key="item.textbookId"
+              :label="item.title"
+              :value="item.textbookId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="总数量" prop="totalQuantity">
-          <el-input v-model="form.totalQuantity" placeholder="请输入总数量" />
+          <el-input-number v-model="form.totalQuantity" controls-position="right" :min="0" placeholder="请输入总数量" style="width: 100%" />
         </el-form-item>
         <el-form-item label="可领用数量" prop="availableQuantity">
-          <el-input v-model="form.availableQuantity" placeholder="请输入可领用数量" />
+          <el-input-number v-model="form.availableQuantity" controls-position="right" :min="0" placeholder="请输入可领用数量" style="width: 100%" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -104,6 +119,7 @@
 
 <script setup name="Inventory">
 import { listInventory, getInventory, delInventory, addInventory, updateInventory } from "@/api/system/inventory"
+import { listBooks } from "@/api/textbook/books"
 
 const { proxy } = getCurrentInstance()
 
@@ -116,6 +132,7 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
+const textbookOptions = ref([])
 
 const data = reactive({
   form: {},
@@ -125,10 +142,28 @@ const data = reactive({
     textbookId: null,
   },
   rules: {
+    textbookId: [
+      { required: true, message: "教材不能为空", trigger: "change" }
+    ],
+    totalQuantity: [
+      { required: true, message: "总数量不能为空", trigger: "blur" },
+      { type: "number", min: 0, message: "总数量必须大于等于0", trigger: "blur" }
+    ],
+    availableQuantity: [
+      { required: true, message: "可领用数量不能为空", trigger: "blur" },
+      { type: "number", min: 0, message: "可领用数量必须大于等于0", trigger: "blur" }
+    ]
   }
 })
 
 const { queryParams, form, rules } = toRefs(data)
+
+/** 查询教材列表 */
+function getTextbookList() {
+  listBooks({ pageSize: 1000 }).then(response => {
+    textbookOptions.value = response.rows
+  })
+}
 
 /** 查询教材库存列表 */
 function getList() {
@@ -233,5 +268,8 @@ function handleExport() {
   }, `inventory_${new Date().getTime()}.xlsx`)
 }
 
-getList()
+onMounted(() => {
+  getList()
+  getTextbookList()
+})
 </script>

@@ -197,6 +197,10 @@ const data = reactive({
     operation: [
       { required: true, message: "操作类型不能为空", trigger: "change" }
     ],
+    quantity: [
+      { required: true, message: "数量不能为空", trigger: "blur" },
+      { pattern: /^\d+$/, message: "数量必须为数字", trigger: "blur" }
+    ]
   }
 })
 

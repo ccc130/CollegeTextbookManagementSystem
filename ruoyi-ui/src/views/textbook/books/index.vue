@@ -26,20 +26,24 @@
         />
       </el-form-item>
       <el-form-item label="出版社" prop="publisherId">
-        <el-input
-          v-model="queryParams.publisherId"
-          placeholder="请输入出版社"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.publisherId" placeholder="请选择出版社" clearable filterable>
+          <el-option
+            v-for="item in publisherOptions"
+            :key="item.publisherId"
+            :label="item.publisherName"
+            :value="item.publisherId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="教材类型" prop="categoryId">
-        <el-input
-          v-model="queryParams.categoryId"
-          placeholder="请输入教材类型"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.categoryId" placeholder="请选择教材类型" clearable filterable>
+          <el-option
+            v-for="item in categoryOptions"
+            :key="item.categoryId"
+            :label="item.categoryName"
+            :value="item.categoryId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="定价" prop="price">
         <el-input
@@ -108,11 +112,29 @@
       <el-table-column label="ISBN" align="center" prop="isbn" />
       <el-table-column label="教材名称" align="center" prop="title" />
       <el-table-column label="作者" align="center" prop="author" />
-      <el-table-column label="出版社" align="center" prop="publisherId" />
-      <el-table-column label="教材类型" align="center" prop="categoryId" />
+      <el-table-column label="出版社" align="center" prop="publisherId">
+        <template #default="scope">
+          <span v-for="publisher in publisherOptions" :key="publisher.publisherId">
+            <span v-if="publisher.publisherId === scope.row.publisherId">{{ publisher.publisherName }}</span>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="教材类型" align="center" prop="categoryId">
+        <template #default="scope">
+          <span v-for="category in categoryOptions" :key="category.categoryId">
+            <span v-if="category.categoryId === scope.row.categoryId">{{ category.categoryName }}</span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="版次" align="center" prop="edition" />
       <el-table-column label="定价" align="center" prop="price" />
-      <el-table-column label="添加人" align="center" prop="createdBy" />
+      <el-table-column label="添加人" align="center" prop="createdBy">
+        <template #default="scope">
+          <span v-for="user in userOptions" :key="user.userId">
+            <span v-if="user.userId === scope.row.createdBy">{{ user.userName }}</span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
@@ -150,27 +172,30 @@
           <el-input v-model="form.author" placeholder="请输入作者" />
         </el-form-item>
         <el-form-item label="出版社" prop="publisherId">
-          <el-input v-model="form.publisherId" placeholder="请输入出版社" />
+          <el-select v-model="form.publisherId" placeholder="请选择出版社" clearable filterable>
+            <el-option
+              v-for="item in publisherOptions"
+              :key="item.publisherId"
+              :label="item.publisherName"
+              :value="item.publisherId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="教材类型" prop="categoryId">
-          <el-input v-model="form.categoryId" placeholder="请输入教材类型" />
+          <el-select v-model="form.categoryId" placeholder="请选择教材类型" clearable filterable>
+            <el-option
+              v-for="item in categoryOptions"
+              :key="item.categoryId"
+              :label="item.categoryName"
+              :value="item.categoryId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="版次" prop="edition">
           <el-input v-model="form.edition" placeholder="请输入版次" />
         </el-form-item>
         <el-form-item label="定价" prop="price">
           <el-input v-model="form.price" placeholder="请输入定价" />
-        </el-form-item>
-        <el-form-item label="添加人" prop="createdBy">
-          <el-input v-model="form.createdBy" placeholder="请输入添加人" />
-        </el-form-item>
-        <el-form-item label="创建时间" prop="createdAt">
-          <el-date-picker clearable
-            v-model="form.createdAt"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择创建时间">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -185,8 +210,13 @@
 
 <script setup name="Books">
 import { listBooks, getBooks, delBooks, addBooks, updateBooks } from "@/api/textbook/books"
+import { listPublishers } from "@/api/system/publishers"
+import { listCategories } from "@/api/system/categories"
+import { listUser } from "@/api/system/user"
+import useUserStore from '@/store/modules/user'
 
 const { proxy } = getCurrentInstance()
+const userStore = useUserStore()
 
 const booksList = ref([])
 const open = ref(false)
@@ -197,6 +227,9 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
+const publisherOptions = ref([])
+const categoryOptions = ref([])
+const userOptions = ref([])
 
 const data = reactive({
   form: {},
@@ -212,13 +245,14 @@ const data = reactive({
   },
   rules: {
     isbn: [
-      { required: true, message: "ISBN不能为空", trigger: "blur" }
+      { required: true, message: "ISBN不能为空", trigger: "blur" },
+      { pattern: /^ISBN\d{10}$/, message: "ISBN格式不正确，应以ISBN开头后跟10个数字", trigger: "blur" }
     ],
     title: [
       { required: true, message: "教材名称不能为空", trigger: "blur" }
     ],
     publisherId: [
-      { required: true, message: "出版社不能为空", trigger: "blur" }
+      { required: true, message: "出版社不能为空", trigger: "change" }
     ],
     categoryId: [
       { required: true, message: "教材类型不能为空", trigger: "blur" }
@@ -227,7 +261,8 @@ const data = reactive({
       { required: true, message: "版次不能为空", trigger: "blur" }
     ],
     price: [
-      { required: true, message: "定价不能为空", trigger: "blur" }
+      { required: true, message: "定价不能为空", trigger: "blur" },
+      { pattern: /^([0-9]+)(\.\d{1,2})?$/, message: "定价必须为数字，最多两位小数", trigger: "blur" }
     ],
     createdAt: [
       { required: true, message: "创建时间不能为空", trigger: "blur" }
@@ -236,6 +271,27 @@ const data = reactive({
 })
 
 const { queryParams, form, rules } = toRefs(data)
+
+/** 查询出版社信息列表 */
+function getPublisherList() {
+  listPublishers({ pageSize: 1000 }).then(response => {
+    publisherOptions.value = response.rows
+  })
+}
+
+/** 查询教材类型列表 */
+function getCategoryList() {
+  listCategories({ pageSize: 1000 }).then(response => {
+    categoryOptions.value = response.rows
+  })
+}
+
+/** 查询用户列表 */
+function getUserList() {
+  listUser({ pageSize: 1000 }).then(response => {
+    userOptions.value = response.rows
+  })
+}
 
 /** 查询教材信息列表 */
 function getList() {
@@ -255,6 +311,12 @@ function cancel() {
 
 // 表单重置
 function reset() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const currentDate = `${year}-${month}-${day}`;
+  
   form.value = {
     textbookId: null,
     picture: null,
@@ -265,8 +327,8 @@ function reset() {
     categoryId: null,
     edition: null,
     price: null,
-    createdBy: null,
-    createdAt: null
+    createdBy: userStore.id,
+    createdAt: currentDate
   }
   proxy.resetForm("booksRef")
 }
@@ -312,6 +374,16 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["booksRef"].validate(valid => {
     if (valid) {
+      // 确保创建人字段始终为当前用户ID
+      form.value.createdBy = userStore.id
+      // 确保创建时间为当前日期
+      if (!form.value.createdAt) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        form.value.createdAt = `${year}-${month}-${day}`;
+      }
       if (form.value.textbookId != null) {
         updateBooks(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功")
@@ -347,5 +419,11 @@ function handleExport() {
   }, `books_${new Date().getTime()}.xlsx`)
 }
 
-getList()
+onMounted(() => {
+  getList()
+  getPublisherList()
+  getCategoryList()
+  getUserList()
+})
+
 </script>

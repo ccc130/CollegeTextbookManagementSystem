@@ -81,7 +81,7 @@
     <!-- 添加或修改出版社信息对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="publishersRef" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="出版社名称" prop="publisherName">
+        <el-form-item label="名称" prop="publisherName">
           <el-input v-model="form.publisherName" placeholder="请输入出版社名称" />
         </el-form-item>
         <el-form-item label="联系方式" prop="contactInfo">
