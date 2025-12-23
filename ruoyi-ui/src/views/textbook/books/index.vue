@@ -114,25 +114,19 @@
       <el-table-column label="作者" align="center" prop="author" />
       <el-table-column label="出版社" align="center" prop="publisherId">
         <template #default="scope">
-          <span v-for="publisher in publisherOptions" :key="publisher.publisherId">
-            <span v-if="publisher.publisherId === scope.row.publisherId">{{ publisher.publisherName }}</span>
-          </span>
+          {{ getPublisherNameById(scope.row.publisherId) }}
         </template>
       </el-table-column>
       <el-table-column label="教材类型" align="center" prop="categoryId">
         <template #default="scope">
-          <span v-for="category in categoryOptions" :key="category.categoryId">
-            <span v-if="category.categoryId === scope.row.categoryId">{{ category.categoryName }}</span>
-          </span>
+          {{ getCategoryNameById(scope.row.categoryId) }}
         </template>
       </el-table-column>
       <el-table-column label="版次" align="center" prop="edition" />
       <el-table-column label="定价" align="center" prop="price" />
       <el-table-column label="添加人" align="center" prop="createdBy">
         <template #default="scope">
-          <span v-for="user in userOptions" :key="user.userId">
-            <span v-if="user.userId === scope.row.createdBy">{{ user.userName }}</span>
-          </span>
+          {{ getUserNameById(scope.row.createdBy) }}
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
@@ -303,6 +297,30 @@ function getList() {
   })
 }
 
+// 根据ID获取出版社名称
+function getPublisherNameById(publisherId) {
+  if (!publisherId) return '';
+  
+  const publisher = publisherOptions.value.find(item => item.publisherId == publisherId);
+  return publisher ? publisher.publisherName : publisherId;
+}
+
+// 根据ID获取教材类型名称
+function getCategoryNameById(categoryId) {
+  if (!categoryId) return '';
+  
+  const category = categoryOptions.value.find(item => item.categoryId == categoryId);
+  return category ? category.categoryName : categoryId;
+}
+
+// 根据ID获取用户名称
+function getUserNameById(userId) {
+  if (!userId) return '';
+  
+  const user = userOptions.value.find(item => item.userId == userId);
+  return user ? user.userName : userId;
+}
+
 // 取消按钮
 function cancel() {
   open.value = false
@@ -425,5 +443,4 @@ onMounted(() => {
   getCategoryList()
   getUserList()
 })
-
 </script>

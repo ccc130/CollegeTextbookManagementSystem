@@ -2,12 +2,14 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="教材名称" prop="textbookId">
-        <el-input
-          v-model="queryParams.textbookId"
-          placeholder="请输入教材名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.textbookId" placeholder="请选择教材名称" clearable filterable>
+          <el-option
+            v-for="item in textbookOptions"
+            :key="item.textbookId"
+            :label="item.title"
+            :value="item.textbookId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="操作类型" prop="operation">
         <el-select v-model="queryParams.operation" placeholder="请选择操作类型" clearable>
@@ -20,12 +22,14 @@
         </el-select>
       </el-form-item>
       <el-form-item label="操作人" prop="operatorId">
-        <el-input
-          v-model="queryParams.operatorId"
-          placeholder="请输入操作人"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select v-model="queryParams.operatorId" placeholder="请选择操作人" clearable filterable>
+          <el-option
+            v-for="item in userOptions"
+            :key="item.userId"
+            :label="item.userName"
+            :value="item.userId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="操作时间" prop="createdAt">
         <el-date-picker clearable
@@ -86,14 +90,22 @@
     <el-table v-loading="loading" :data="logsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="日志ID" align="center" prop="logId" />
-      <el-table-column label="教材名称" align="center" prop="textbookId" />
+      <el-table-column label="教材名称" align="center" prop="textbookId">
+        <template #default="scope">
+          {{ getTextbookNameById(scope.row.textbookId) }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作类型" align="center" prop="operation">
         <template #default="scope">
           <dict-tag :options="textbook_operation" :value="scope.row.operation"/>
         </template>
       </el-table-column>
       <el-table-column label="数量" align="center" prop="quantity" />
-      <el-table-column label="操作人" align="center" prop="operatorId" />
+      <el-table-column label="操作人" align="center" prop="operatorId">
+        <template #default="scope">
+          {{ getUserNameById(scope.row.operatorId) }}
+        </template>
+      </el-table-column>
       <el-table-column label="征订申请" align="center" prop="relatedRequestId" />
       <el-table-column label="备注" align="center" prop="notes" />
       <el-table-column label="操作时间" align="center" prop="createdAt" width="180">
@@ -121,7 +133,14 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="logsRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="教材名称" prop="textbookId">
-          <el-input v-model="form.textbookId" placeholder="请输入教材名称" />
+          <el-select v-model="form.textbookId" placeholder="请选择教材" clearable filterable>
+            <el-option
+              v-for="item in textbookOptions"
+              :key="item.textbookId"
+              :label="item.title"
+              :value="item.textbookId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="操作类型" prop="operation">
           <el-select v-model="form.operation" placeholder="请选择操作类型">
@@ -137,7 +156,14 @@
           <el-input v-model="form.quantity" placeholder="请输入数量" />
         </el-form-item>
         <el-form-item label="操作人" prop="operatorId">
-          <el-input v-model="form.operatorId" placeholder="请输入操作人" />
+          <el-select v-model="form.operatorId" placeholder="请选择操作人" clearable filterable>
+            <el-option
+              v-for="item in userOptions"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="征订申请" prop="relatedRequestId">
           <el-input v-model="form.relatedRequestId" placeholder="请输入征订申请" />
@@ -166,6 +192,8 @@
 
 <script setup name="Logs">
 import { listLogs, getLogs, delLogs, addLogs, updateLogs } from "@/api/system/logs"
+import { listBooks } from "@/api/textbook/books"
+import { listUser } from "@/api/system/user"
 
 const { proxy } = getCurrentInstance()
 const { textbook_operation } = proxy.useDict('textbook_operation')
@@ -179,6 +207,8 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
+const textbookOptions = ref([])
+const userOptions = ref([])
 
 const data = reactive({
   form: {},
@@ -214,6 +244,36 @@ function getList() {
     total.value = response.total
     loading.value = false
   })
+}
+
+/** 查询教材信息列表 */
+function getTextbookList() {
+  listBooks({ pageSize: 1000 }).then(response => {
+    textbookOptions.value = response.rows
+  })
+}
+
+/** 查询用户列表 */
+function getUserList() {
+  listUser({ pageSize: 1000 }).then(response => {
+    userOptions.value = response.rows
+  })
+}
+
+/** 根据教材ID获取教材名称 */
+function getTextbookNameById(textbookId) {
+  if (!textbookId) return '';
+  
+  const textbook = textbookOptions.value.find(item => item.textbookId == textbookId);
+  return textbook ? textbook.title : textbookId;
+}
+
+/** 根据用户ID获取用户名称 */
+function getUserNameById(userId) {
+  if (!userId) return '';
+  
+  const user = userOptions.value.find(item => item.userId == userId);
+  return user ? user.userName : userId;
 }
 
 // 取消按钮
@@ -313,5 +373,9 @@ function handleExport() {
   }, `logs_${new Date().getTime()}.xlsx`)
 }
 
-getList()
+onMounted(() => {
+  getList()
+  getTextbookList()
+  getUserList()
+})
 </script>

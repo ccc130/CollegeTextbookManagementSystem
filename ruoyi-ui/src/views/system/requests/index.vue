@@ -2,12 +2,19 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="申请人" prop="teacherId">
-        <el-input
-          v-model="queryParams.teacherId"
-          placeholder="请输入申请人"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select 
+          v-model="queryParams.teacherId" 
+          placeholder="请选择申请人" 
+          clearable 
+          filterable
+        >
+          <el-option
+            v-for="item in userOptions"
+            :key="item.userId"
+            :label="item.userName"
+            :value="item.userId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="申请教材" prop="textbookId">
         <el-select 
@@ -77,12 +84,19 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="审核人" prop="reviewedBy" v-if="hasReviewPermission">
-        <el-input
-          v-model="queryParams.reviewedBy"
-          placeholder="请输入审核人"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+        <el-select 
+          v-model="queryParams.reviewedBy" 
+          placeholder="请选择审核人" 
+          clearable 
+          filterable
+        >
+          <el-option
+            v-for="item in userOptions"
+            :key="item.userId"
+            :label="item.userName"
+            :value="item.userId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="审核时间" prop="reviewedAt" v-if="hasReviewPermission">
         <el-date-picker clearable
@@ -154,8 +168,16 @@
     <el-table v-loading="loading" :data="requestsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="申请ID" align="center" prop="requestId" />
-      <el-table-column label="申请人" align="center" prop="teacherId" />
-      <el-table-column label="申请教材" align="center" prop="textbookId" />
+      <el-table-column label="申请人" align="center" prop="teacherId">
+        <template #default="scope">
+          {{ getUserNameById(scope.row.teacherId) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="申请教材" align="center" prop="textbookId">
+        <template #default="scope">
+          {{ getTextbookNameById(scope.row.textbookId) }}
+        </template>
+      </el-table-column>
       <el-table-column label="课程名称" align="center" prop="courseName" />
       <el-table-column label="授课班级" align="center" prop="classId" />
       <el-table-column label="申请数量" align="center" prop="quantity" />
@@ -174,7 +196,11 @@
           <span>{{ parseTime(scope.row.submittedAt, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审核人" align="center" prop="reviewedBy" v-if="hasReviewPermission" />
+      <el-table-column label="审核人" align="center" prop="reviewedBy" v-if="hasReviewPermission">
+        <template #default="scope">
+          {{ getUserNameById(scope.row.reviewedBy) }}
+        </template>
+      </el-table-column>
       <el-table-column label="审核时间" align="center" prop="reviewedAt" width="180" v-if="hasReviewPermission">
         <template #default="scope">
           <span>{{ parseTime(scope.row.reviewedAt, '{y}-{m}-{d}') }}</span>
@@ -202,7 +228,20 @@
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
       <el-form ref="requestsRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="申请人" prop="teacherId">
-          <el-input v-model="form.teacherId" placeholder="请输入申请人" :disabled="isReviewMode" />
+          <el-select 
+            v-model="form.teacherId" 
+            placeholder="请选择申请人" 
+            clearable 
+            filterable
+            :disabled="isReviewMode"
+          >
+            <el-option
+              v-for="item in userOptions"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="申请教材" prop="textbookId">
           <el-select 
@@ -211,11 +250,12 @@
             clearable 
             filterable
             :disabled="isReviewMode"
+            @change="handleTextbookChange"
           >
             <el-option
               v-for="item in textbookOptions"
               :key="item.textbookId"
-              :label="item.title"
+              :label="item.title + ' (库存: ' + (inventoryMap[item.textbookId] ? inventoryMap[item.textbookId].availableQuantity : 0) + ')'"
               :value="item.textbookId"
             />
           </el-select>
@@ -236,7 +276,18 @@
           />
         </el-form-item>
         <el-form-item label="申请数量" prop="quantity">
-          <el-input v-model="form.quantity" placeholder="请输入申请数量" :disabled="isReviewMode" />
+          <el-input 
+            v-model="form.quantity" 
+            placeholder="请输入申请数量" 
+            :disabled="isReviewMode"
+            @input="handleQuantityChange"
+          />
+          <div v-if="selectedTextbookInventory !== null" class="inventory-info">
+            当前库存: {{ selectedTextbookInventory }} 
+            <span v-if="form.quantity && parseInt(form.quantity) > selectedTextbookInventory" style="color: red;">
+              (库存不足)
+            </span>
+          </div>
         </el-form-item>
         <el-form-item label="状态" prop="status" v-if="hasStatusPermission">
           <el-select v-model="form.status" placeholder="请选择状态">
@@ -274,7 +325,20 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="审核人" prop="reviewedBy" v-if="hasReviewPermission">
-          <el-input v-model="form.reviewedBy" placeholder="请输入审核人" disabled />
+          <el-select 
+            v-model="form.reviewedBy" 
+            placeholder="请选择审核人" 
+            clearable 
+            filterable
+            disabled
+          >
+            <el-option
+              v-for="item in userOptions"
+              :key="item.userId"
+              :label="item.userName"
+              :value="item.userId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="审核时间" prop="reviewedAt" v-if="hasReviewPermission">
           <el-date-picker clearable
@@ -304,8 +368,8 @@ import { listRequests, getRequests, delRequests, addRequests, updateRequests } f
 import useUserStore from '@/store/modules/user'
 import { listBooks } from "@/api/textbook/books"
 import { listDept } from "@/api/system/dept"
-import { deptTreeSelect } from "@/api/system/user"
-import { updateInventory, getInventory, addInventory } from "@/api/system/inventory"
+import { deptTreeSelect, listUser } from "@/api/system/user"
+import { updateInventory, getInventory, addInventory, listInventory } from "@/api/system/inventory"
 import { addLogs } from "@/api/system/logs"
 import request from '@/utils/request'
 
@@ -342,6 +406,10 @@ const isReviewMode = ref(false)
 const textbookOptions = ref([])
 const classOptions = ref([])
 const collegeOptions = ref([])
+const userOptions = ref([])
+// 添加库存映射和当前选中教材的库存信息
+const inventoryMap = ref({})
+const selectedTextbookInventory = ref(null)
 
 const data = reactive({
   form: {},
@@ -370,7 +438,8 @@ const data = reactive({
     ],
     quantity: [
       { required: true, message: "申请数量不能为空", trigger: "blur" },
-      { pattern: /^[1-9]\d*$/, message: "申请数量必须为大于0的整数", trigger: "blur" }
+      { pattern: /^[1-9]\d*$/, message: "申请数量必须为大于0的整数", trigger: "blur" },
+      { validator: validateQuantityAgainstInventory, trigger: "blur" }
     ],
     collegeId: [
       { required: true, message: "所属学院不能为空", trigger: "blur" }
@@ -379,6 +448,34 @@ const data = reactive({
 })
 
 const { queryParams, form, rules } = toRefs(data)
+
+// 验证申请数量是否超过库存
+function validateQuantityAgainstInventory(rule, value, callback) {
+  if (!value) {
+    callback()
+    return
+  }
+
+  const quantity = parseInt(value)
+  if (isNaN(quantity) || quantity <= 0) {
+    callback(new Error("申请数量必须为大于0的整数"))
+    return
+  }
+
+  // 如果没有选中教材或没有库存信息，则跳过验证
+  if (!form.value.textbookId || selectedTextbookInventory.value === null) {
+    callback()
+    return
+  }
+
+  // 检查申请数量是否超过可用库存
+  if (quantity > selectedTextbookInventory.value) {
+    callback(new Error(`申请数量不能超过当前可用库存 ${selectedTextbookInventory.value}`))
+    return
+  }
+
+  callback()
+}
 
 /** 查询征订申请列表 */
 function getList() {
@@ -438,6 +535,49 @@ function getCollegeList() {
   });
 }
 
+/** 获取用户列表 */
+function getUserList() {
+  listUser({ pageSize: 1000 }).then(response => {
+    userOptions.value = response.rows
+  })
+}
+
+/** 获取库存列表并构建库存映射 */
+function getInventoryList() {
+  listInventory({ pageSize: 10000 }).then(response => {
+    // 构建库存映射，key为textbookId，value为库存对象
+    inventoryMap.value = {}
+    response.rows.forEach(item => {
+      inventoryMap.value[item.textbookId] = item
+    })
+    console.log('Inventory map loaded:', inventoryMap.value)
+  }).catch(error => {
+    console.error('Failed to load inventory data:', error)
+  })
+}
+
+// 处理教材选择变化
+function handleTextbookChange(value) {
+  // 更新当前选中教材的库存信息
+  if (value && inventoryMap.value[value]) {
+    selectedTextbookInventory.value = inventoryMap.value[value].availableQuantity
+  } else {
+    selectedTextbookInventory.value = 0 // 如果没有库存记录，默认为0
+  }
+}
+
+// 处理数量输入变化
+function handleQuantityChange() {
+  // 实时验证数量是否超过库存
+  if (form.value.quantity && selectedTextbookInventory.value !== null) {
+    const quantity = parseInt(form.value.quantity)
+    if (quantity > selectedTextbookInventory.value) {
+      // 可以在这里添加警告提示
+      console.warn(`申请数量 ${quantity} 超过当前可用库存 ${selectedTextbookInventory.value}`)
+    }
+  }
+}
+
 // 取消按钮
 function cancel() {
   open.value = false
@@ -450,6 +590,22 @@ function getCollegeNameById(collegeId) {
   
   const college = collegeOptions.value.find(item => item.deptId == collegeId);
   return college ? college.deptName : collegeId;
+}
+
+// 根据ID获取教材名称
+function getTextbookNameById(textbookId) {
+  if (!textbookId) return '';
+  
+  const textbook = textbookOptions.value.find(item => item.textbookId == textbookId);
+  return textbook ? textbook.title : textbookId;
+}
+
+// 根据ID获取用户名称
+function getUserNameById(userId) {
+  if (!userId) return '';
+  
+  const user = userOptions.value.find(item => item.userId == userId);
+  return user ? user.userName : userId;
 }
 
 // 表单重置
@@ -472,6 +628,7 @@ function reset() {
     remarks: null
   }
   isReviewMode.value = false
+  selectedTextbookInventory.value = null
   proxy.resetForm("requestsRef")
 }
 
@@ -598,6 +755,12 @@ function handleUpdate(row) {
   const _requestId = row.requestId || ids.value
   getRequests(_requestId).then(response => {
     form.value = response.data
+    // 设置当前选中教材的库存信息
+    if (form.value.textbookId && inventoryMap.value[form.value.textbookId]) {
+      selectedTextbookInventory.value = inventoryMap.value[form.value.textbookId].availableQuantity
+    } else {
+      selectedTextbookInventory.value = 0
+    }
     open.value = true
     title.value = "修改征订申请"
   })
@@ -609,6 +772,12 @@ function handleReview(row) {
   const _requestId = row.requestId || ids.value
   getRequests(_requestId).then(response => {
     form.value = response.data
+    // 设置当前选中教材的库存信息
+    if (form.value.textbookId && inventoryMap.value[form.value.textbookId]) {
+      selectedTextbookInventory.value = inventoryMap.value[form.value.textbookId].availableQuantity
+    } else {
+      selectedTextbookInventory.value = 0
+    }
     // 设置审核模式
     isReviewMode.value = true
     // 自动填充审核人和审核时间
@@ -651,12 +820,23 @@ function submitForm() {
           getList()
         })
       } else {
+        // 对于新增申请，验证申请数量不超过库存
+        if (form.value.textbookId && selectedTextbookInventory.value !== null) {
+          const quantity = parseInt(form.value.quantity)
+          if (quantity > selectedTextbookInventory.value) {
+            proxy.$modal.msgError(`申请数量不能超过当前可用库存 ${selectedTextbookInventory.value}`)
+            return
+          }
+        }
+        
         addRequests(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功")
           open.value = false
           getList()
         })
       }
+    } else {
+      proxy.$modal.msgError("请检查输入信息是否正确")
     }
   })
 }
@@ -685,8 +865,9 @@ onMounted(() => {
   getTextbookList()
   getClassList()
   getCollegeList()
+  getUserList()
+  getInventoryList() // 获取库存信息
   console.log('Component initialized.');
 })
 
 </script>
-
