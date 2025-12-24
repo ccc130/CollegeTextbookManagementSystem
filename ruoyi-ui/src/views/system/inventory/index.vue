@@ -120,6 +120,8 @@
 <script setup name="Inventory">
 import { listInventory, getInventory, delInventory, addInventory, updateInventory } from "@/api/system/inventory"
 import { listBooks } from "@/api/textbook/books"
+import { addLogs } from "@/api/system/logs"
+import useUserStore from '@/store/modules/user'
 
 const { proxy } = getCurrentInstance()
 
@@ -211,6 +213,25 @@ function handleSelectionChange(selection) {
   multiple.value = !selection.length
 }
 
+// 添加日志记录函数
+function addLogRecord(textbookId, operation, quantity, notes = '') {
+  const logData = {
+    textbookId: textbookId,
+    operation: operation, // 0: 入库, 1: 出库
+    quantity: quantity,
+    operatorId: userStore.id,
+    relatedRequestId: null, // 关联的申请ID，此处为直接修改库存，设为null
+    notes: notes,
+    createdAt: new Date().toISOString().slice(0, 10)
+  };
+  
+  addLogs(logData).then(() => {
+    console.log('日志记录添加成功');
+  }).catch(error => {
+    console.error('日志记录添加失败:', error);
+  });
+}
+
 /** 新增按钮操作 */
 function handleAdd() {
   reset()
@@ -234,14 +255,37 @@ function submitForm() {
   proxy.$refs["inventoryRef"].validate(valid => {
     if (valid) {
       if (form.value.inventoryId != null) {
-        updateInventory(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
-          open.value = false
-          getList()
-        })
+        // 获取修改前的库存数据，用于计算数量变化
+        getInventory(form.value.inventoryId).then(originalResponse => {
+          const originalData = originalResponse.data;
+          const totalQuantityDiff = form.value.totalQuantity - (originalData.totalQuantity || 0);
+          const availableQuantityDiff = form.value.availableQuantity - (originalData.availableQuantity || 0);
+          
+          updateInventory(form.value).then(response => {
+            proxy.$modal.msgSuccess("修改成功")
+            
+            // 记录库存变化日志
+            if (totalQuantityDiff !== 0) {
+              const operationType = totalQuantityDiff > 0 ? '0' : '1'; // 0: 入库, 1: 出库
+              const quantity = Math.abs(totalQuantityDiff);
+              const notes = `库存数量变更: ${originalData.totalQuantity || 0} -> ${form.value.totalQuantity}`;
+              addLogRecord(form.value.textbookId, operationType, quantity, notes);
+            }
+            
+            open.value = false
+            getList()
+          })
+        });
       } else {
         addInventory(form.value).then(response => {
           proxy.$modal.msgSuccess("新增成功")
+          
+          // 记录新增库存日志
+          if (form.value.totalQuantity > 0) {
+            const notes = `新增库存记录，初始数量: ${form.value.totalQuantity}`;
+            addLogRecord(form.value.textbookId, '0', form.value.totalQuantity, notes); // 0: 入库
+          }
+          
           open.value = false
           getList()
         })

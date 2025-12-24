@@ -384,6 +384,11 @@ const hasReviewPermission = computed(() => {
          userStore.permissions.includes('system:requests:review')
 })
 
+// 检查用户是否有状态修改权限（在审核模式下）
+const hasStatusPermission = computed(() => {
+  return hasReviewPermission.value || isReviewMode.value;
+})
+
 const requestsList = ref([])
 const open = ref(false)
 const loading = ref(true)
@@ -637,41 +642,39 @@ function updateInventoryOnApproval(requestData) {
       availableQuantity: (inventoryData.availableQuantity || 0) + parseInt(requestData.quantity)
     };
     
-    // 如果是新库存记录
-    if (!inventoryData.inventoryId) {
-      updatedInventory.textbookId = requestData.textbookId;
-      addOrUpdateInventory(updatedInventory);
-    } else {
+    // 只有当库存记录存在时才更新，否则提示错误
+    if (inventoryData.inventoryId) {
       // 更新现有库存
       updateInventory(updatedInventory).then(() => {
         console.log('库存更新成功');
+        // 添加日志记录
+        addLogRecord(requestData, parseInt(requestData.quantity));
       }).catch(error => {
         console.error('库存更新失败:', error);
       });
+    } else {
+      // 如果没有找到库存记录，提示用户先创建库存记录
+      console.error('库存记录不存在，请先为教材创建库存记录');
+      proxy.$modal.msgError('库存记录不存在，请先为教材"' + getTextbookNameById(requestData.textbookId) + '"创建库存记录');
     }
-    
-    // 添加日志记录
-    addLogRecord(requestData, parseInt(requestData.quantity));
   }).catch(() => {
-    // 如果没有找到库存记录，创建一个新的
-    const newInventory = {
-      textbookId: requestData.textbookId,
-      totalQuantity: parseInt(requestData.quantity),
-      availableQuantity: parseInt(requestData.quantity)
-    };
-    addOrUpdateInventory(newInventory);
-    
-    // 添加日志记录
-    addLogRecord(requestData, parseInt(requestData.quantity));
+    // 如果没有找到库存记录，提示用户先创建库存记录
+    console.error('库存记录不存在，请先为教材创建库存记录');
+    proxy.$modal.msgError('库存记录不存在，请先为教材"' + getTextbookNameById(requestData.textbookId) + '"创建库存记录');
   });
 }
 
-// 根据教材ID获取库存信息
+// 根据教材ID从库存映射中获取库存信息
 function getInventoryByTextbookId(textbookId) {
-  return request({
-    url: '/system/inventory/getByTextbookId/' + textbookId,
-    method: 'get'
-  })
+  return new Promise((resolve, reject) => {
+    // 从库存映射中查找对应的库存记录
+    const inventoryData = inventoryMap.value[textbookId];
+    if (inventoryData) {
+      resolve({ data: inventoryData });
+    } else {
+      reject(new Error('Inventory not found'));
+    }
+  });
 }
 
 // 添加或更新库存
