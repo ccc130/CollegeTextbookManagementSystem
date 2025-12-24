@@ -11,7 +11,7 @@
  Target Server Version : 80200
  File Encoding         : 65001
 
- Date: 24/12/2025 11:01:14
+ Date: 24/12/2025 16:12:56
 */
 
 SET NAMES utf8mb4;
@@ -315,6 +315,8 @@ INSERT INTO `sys_logininfor` VALUES (170, 'admin', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_logininfor` VALUES (171, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 11:00:22');
 INSERT INTO `sys_logininfor` VALUES (172, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 11:00:29');
 INSERT INTO `sys_logininfor` VALUES (173, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 11:00:43');
+INSERT INTO `sys_logininfor` VALUES (174, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 16:03:45');
+INSERT INTO `sys_logininfor` VALUES (175, '13', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 16:03:49');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -608,6 +610,26 @@ INSERT INTO `sys_oper_log` VALUES (216, '菜单管理', 1, 'com.ruoyi.web.contro
 INSERT INTO `sys_oper_log` VALUES (217, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', '计算机科学与技术学院', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"createBy\":\"admin\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuName\":\"教师导出\",\"menuType\":\"F\",\"orderNum\":1,\"params\":{},\"parentId\":2039,\"perms\":\"system:teacher:export\",\"status\":\"0\",\"visible\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 10:58:25', 5);
 INSERT INTO `sys_oper_log` VALUES (218, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:12\",\"dataScope\":\"4\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"flag\":false,\"menuCheckStrictly\":true,\"menuIds\":[1,100,103,2000,2008,2014,2002,1000,1004,2039,2040,2041,2042,2043,2044,1016,2009,2013,2015,2019,2003,2007,2001,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030,2031,2038,2032,2033,2034,2035,2036,2037],\"params\":{},\"roleId\":100,\"roleKey\":\"admin2\",\"roleName\":\"学院管理员\",\"roleSort\":3,\"status\":\"0\",\"updateBy\":\"admin\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 10:58:44', 11);
 INSERT INTO `sys_oper_log` VALUES (219, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"4\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"deptIds\":[],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 11:00:19', 5);
+INSERT INTO `sys_oper_log` VALUES (220, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":2,\"inventoryId\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:06:39', 16);
+INSERT INTO `sys_oper_log` VALUES (221, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, 'admin', '研发部门', '/system/requests', '127.0.0.1', '内网IP', '{\"classId\":103,\"collegeId\":101,\"courseName\":\"2\",\"params\":{},\"quantity\":\"1\",\"requestId\":4,\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":1,\"textbookId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:27:54', 25);
+INSERT INTO `sys_oper_log` VALUES (222, '征订申请', 2, 'com.ruoyi.system.controller.TextbookOrderRequestsController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/requests', '127.0.0.1', '内网IP', '{\"classId\":103,\"collegeId\":101,\"courseName\":\"2\",\"params\":{},\"quantity\":\"1\",\"requestId\":4,\"reviewedAt\":\"2025-12-24\",\"reviewedBy\":1,\"status\":1,\"submittedAt\":\"2025-12-24\",\"teacherId\":1,\"textbookId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:37:12', 13);
+INSERT INTO `sys_oper_log` VALUES (223, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":3,\"inventoryId\":2,\"params\":{},\"textbookId\":2,\"totalQuantity\":3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:37:12', 4);
+INSERT INTO `sys_oper_log` VALUES (224, '出入库日志', 1, 'com.ruoyi.system.controller.TextbookStockLogsController.add()', 'POST', 1, 'admin', '研发部门', '/system/logs', '127.0.0.1', '内网IP', '{\"createdAt\":\"2025-12-24\",\"logId\":4,\"notes\":\"征订申请审核通过，申请ID: 4\",\"operation\":0,\"operatorId\":1,\"params\":{},\"quantity\":1,\"relatedRequestId\":4,\"textbookId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:37:12', 10);
+INSERT INTO `sys_oper_log` VALUES (225, '教材库存', 3, 'com.ruoyi.system.controller.TextbookInventoryController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/inventory/2', '127.0.0.1', '内网IP', '[2]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:37:18', 8);
+INSERT INTO `sys_oper_log` VALUES (226, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":2,\"inventoryId\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":6}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:39:37', 5);
+INSERT INTO `sys_oper_log` VALUES (227, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":2,\"inventoryId\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":9}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:39:49', 11);
+INSERT INTO `sys_oper_log` VALUES (228, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":2,\"inventoryId\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":5}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:42:40', 11);
+INSERT INTO `sys_oper_log` VALUES (229, '教材库存', 1, 'com.ruoyi.system.controller.TextbookInventoryController.add()', 'POST', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":3,\"params\":{},\"textbookId\":2,\"totalQuantity\":5}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:43:11', 5);
+INSERT INTO `sys_oper_log` VALUES (230, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '研发部门', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"5\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"deptIds\":[],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:46:10', 20);
+INSERT INTO `sys_oper_log` VALUES (231, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":2,\"inventoryId\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:48:50', 4);
+INSERT INTO `sys_oper_log` VALUES (232, '教材库存', 1, 'com.ruoyi.system.controller.TextbookInventoryController.add()', 'POST', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":3}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:49:17', 3);
+INSERT INTO `sys_oper_log` VALUES (233, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":2,\"inventoryId\":1,\"params\":{},\"textbookId\":2,\"totalQuantity\":0}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 15:51:12', 10);
+INSERT INTO `sys_oper_log` VALUES (234, '教材信息', 5, 'com.ruoyi.system.controller.TextbookBooksController.export()', 'POST', 1, 'admin', '研发部门', '/textbook/books/export', '127.0.0.1', '内网IP', '{\"pageSize\":\"10\",\"pageNum\":\"1\"}', NULL, 0, NULL, '2025-12-24 16:00:56', 916);
+INSERT INTO `sys_oper_log` VALUES (235, '教材库存', 3, 'com.ruoyi.system.controller.TextbookInventoryController.remove()', 'DELETE', 1, 'admin', '研发部门', '/system/inventory/1', '127.0.0.1', '内网IP', '[1]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 16:02:01', 13);
+INSERT INTO `sys_oper_log` VALUES (236, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '研发部门', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":3,\"inventoryId\":3,\"params\":{},\"textbookId\":2,\"totalQuantity\":7}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 16:02:07', 10);
+INSERT INTO `sys_oper_log` VALUES (237, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, '13', '计科2201', '/system/requests', '127.0.0.1', '内网IP', '{\"courseName\":\"123\",\"params\":{},\"quantity\":\"1\",\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":102,\"textbookId\":2}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\r\n### The error may exist in file [D:\\project\\java\\CollegeTextbookManagementSystem\\ruoyi-system\\target\\classes\\mapper\\system\\TextbookOrderRequestsMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.TextbookOrderRequestsMapper.insertTextbookOrderRequests-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into textbook_order_requests          ( teacher_id,             textbook_id,             course_name,                          quantity,             status,                          submitted_at )           values ( ?,             ?,             ?,                          ?,             ?,                          ? )\r\n### Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\n; Field \'college_id\' doesn\'t have a default value; nested exception is java.sql.SQLException: Field \'college_id\' doesn\'t have a default value', '2025-12-24 16:05:26', 112);
+INSERT INTO `sys_oper_log` VALUES (238, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, '13', '计科2201', '/system/requests', '127.0.0.1', '内网IP', '{\"courseName\":\"123\",\"params\":{},\"quantity\":\"1\",\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":102,\"textbookId\":2}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\r\n### The error may exist in file [D:\\project\\java\\CollegeTextbookManagementSystem\\ruoyi-system\\target\\classes\\mapper\\system\\TextbookOrderRequestsMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.TextbookOrderRequestsMapper.insertTextbookOrderRequests-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into textbook_order_requests          ( teacher_id,             textbook_id,             course_name,                          quantity,             status,                          submitted_at )           values ( ?,             ?,             ?,                          ?,             ?,                          ? )\r\n### Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\n; Field \'college_id\' doesn\'t have a default value; nested exception is java.sql.SQLException: Field \'college_id\' doesn\'t have a default value', '2025-12-24 16:05:29', 5);
+INSERT INTO `sys_oper_log` VALUES (239, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, '13', '计科2201', '/system/requests', '127.0.0.1', '内网IP', '{\"courseName\":\"123\",\"params\":{},\"quantity\":\"1\",\"requestId\":5,\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":102,\"textbookId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 16:05:56', 6);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -661,7 +683,7 @@ CREATE TABLE `sys_role`  (
 INSERT INTO `sys_role` VALUES (1, '系统管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2025-12-22 08:17:49', '', NULL, '超级管理员');
 INSERT INTO `sys_role` VALUES (2, '教材管理员', 'admin1', 2, '1', 0, 1, '0', '0', 'admin', '2025-12-22 08:17:49', 'admin', '2025-12-24 10:29:29', '普通角色');
 INSERT INTO `sys_role` VALUES (100, '学院管理员', 'admin2', 3, '4', 1, 1, '0', '0', 'admin', '2025-12-23 08:38:12', 'admin', '2025-12-24 10:58:44', NULL);
-INSERT INTO `sys_role` VALUES (101, '任课老师', 'teacher', 4, '4', 0, 1, '0', '0', 'admin', '2025-12-23 08:38:42', 'admin', '2025-12-24 11:00:19', NULL);
+INSERT INTO `sys_role` VALUES (101, '任课老师', 'teacher', 4, '5', 0, 1, '0', '0', 'admin', '2025-12-23 08:38:42', 'admin', '2025-12-24 15:46:10', NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -829,7 +851,7 @@ INSERT INTO `sys_user` VALUES (1, 101, 'admin', 'ccc', '00', 'ry@163.com', '1588
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', 'ccc', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-22 08:17:49', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', NULL, '测试员');
 INSERT INTO `sys_user` VALUES (100, 100, '11', '11', '00', '', '', '0', '', '$2a$10$E4Ll4pSKVot0E1CwuCSDj.dYbTzCbTgzHS5UgxuVwyS7bHhmEahSe', '0', '0', '127.0.0.1', '2025-12-24 10:29:37', NULL, 'admin', '2025-12-23 09:18:10', '', '2025-12-24 10:29:36', NULL);
 INSERT INTO `sys_user` VALUES (101, 101, '12', '12', '00', '', '', '0', '', '$2a$10$Lk98Xyv2BhsozQXp6.lDA.SkHfBRKeduJl5ZbmYbCJuVT2Rab.20e', '0', '0', '127.0.0.1', '2025-12-24 10:36:35', NULL, 'admin', '2025-12-23 09:18:21', '', '2025-12-24 10:36:35', NULL);
-INSERT INTO `sys_user` VALUES (102, 103, '13', '13', '00', '', '', '0', '', '$2a$10$/AB6VvoBva8DeaJW/r/vFOzgxhNPQH/SD7W.Fri6V0x21I.F0/zQm', '0', '0', '127.0.0.1', '2025-12-24 10:59:30', NULL, 'admin', '2025-12-23 09:18:53', '', '2025-12-24 10:59:29', NULL);
+INSERT INTO `sys_user` VALUES (102, 103, '13', '13', '00', '', '', '0', '', '$2a$10$/AB6VvoBva8DeaJW/r/vFOzgxhNPQH/SD7W.Fri6V0x21I.F0/zQm', '0', '0', '127.0.0.1', '2025-12-24 16:03:49', NULL, 'admin', '2025-12-23 09:18:53', '', '2025-12-24 16:03:49', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
@@ -922,8 +944,8 @@ CREATE TABLE `textbook_inventory`  (
 -- ----------------------------
 -- Records of textbook_inventory
 -- ----------------------------
-INSERT INTO `textbook_inventory` VALUES (1, 2, 2, 2);
-INSERT INTO `textbook_inventory` VALUES (2, 2, 2, 2);
+INSERT INTO `textbook_inventory` VALUES (3, 2, 7, 3);
+INSERT INTO `textbook_inventory` VALUES (4, 2, 3, 1);
 
 -- ----------------------------
 -- Table structure for textbook_order_requests
@@ -937,7 +959,7 @@ CREATE TABLE `textbook_order_requests`  (
   `class_id` int(0) DEFAULT NULL COMMENT '授课班级',
   `quantity` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '申请数量',
   `status` int(0) DEFAULT NULL COMMENT '状态',
-  `college_id` int(0) NOT NULL COMMENT '所属学院',
+  `college_id` int(0) DEFAULT NULL COMMENT '所属学院',
   `submitted_at` datetime(0) DEFAULT NULL COMMENT '提交时间',
   `reviewed_by` int(0) DEFAULT NULL COMMENT '审核人',
   `reviewed_at` datetime(0) DEFAULT NULL COMMENT '审核时间',
@@ -951,6 +973,8 @@ CREATE TABLE `textbook_order_requests`  (
 INSERT INTO `textbook_order_requests` VALUES (1, 1, 2, '2', NULL, '1', 1, 101, '2025-12-22 00:00:00', 1, '2025-12-23 00:00:00', NULL);
 INSERT INTO `textbook_order_requests` VALUES (2, 1, 2, '12', 103, '2', 1, 101, '2025-12-22 00:00:00', 1, '2025-12-23 00:00:00', NULL);
 INSERT INTO `textbook_order_requests` VALUES (3, 1, 2, '123', 103, '2', 1, 101, '2025-12-22 00:00:00', 1, '2025-12-23 00:00:00', NULL);
+INSERT INTO `textbook_order_requests` VALUES (4, 1, 2, '2', 103, '1', 1, 101, '2025-12-24 00:00:00', 1, '2025-12-24 00:00:00', NULL);
+INSERT INTO `textbook_order_requests` VALUES (5, 102, 2, '123', NULL, '1', 0, NULL, '2025-12-24 00:00:00', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for textbook_publishers
@@ -992,5 +1016,6 @@ CREATE TABLE `textbook_stock_logs`  (
 INSERT INTO `textbook_stock_logs` VALUES (1, 2, 0, 1, 1, 1, '征订申请审核通过，申请ID: 1', '2025-12-23 00:00:00');
 INSERT INTO `textbook_stock_logs` VALUES (2, 2, 0, 2, 1, 3, '征订申请审核通过，申请ID: 3', '2025-12-23 00:00:00');
 INSERT INTO `textbook_stock_logs` VALUES (3, 2, 0, 2, 1, 2, '征订申请审核通过，申请ID: 2', '2025-12-23 00:00:00');
+INSERT INTO `textbook_stock_logs` VALUES (4, 2, 0, 1, 1, 4, '征订申请审核通过，申请ID: 4', '2025-12-24 00:00:00');
 
 SET FOREIGN_KEY_CHECKS = 1;
