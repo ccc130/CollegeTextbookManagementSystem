@@ -240,7 +240,8 @@ const data = reactive({
   rules: {
     isbn: [
       { required: true, message: "ISBN不能为空", trigger: "blur" },
-      { pattern: /^ISBN\d{10}$/, message: "ISBN格式不正确，应以ISBN开头后跟10个数字", trigger: "blur" }
+      { pattern: /^ISBN\d{10}$/, message: "ISBN格式不正确，应以ISBN开头后跟10个数字", trigger: "blur" },
+      { validator: validateUniqueISBN, trigger: "blur" }
     ],
     title: [
       { required: true, message: "教材名称不能为空", trigger: "blur" }
@@ -321,6 +322,45 @@ function getUserNameById(userId) {
   return user ? user.userName : userId;
 }
 
+/** 验证ISBN唯一性 */
+function validateUniqueISBN(rule, value, callback) {
+  if (!value) {
+    callback()
+    return
+  }
+  
+  // 检查是否为编辑模式
+  if (form.value.textbookId) {
+    // 编辑模式：检查除当前教材外是否还有其他教材使用相同的ISBN
+    getBooks(form.value.textbookId).then(response => {
+      const currentBook = response.data
+      if (currentBook.isbn === value) {
+        // 如果ISBN没有改变，则通过验证
+        callback()
+      } else {
+        // 如果ISBN改变了，检查新ISBN是否已被其他教材使用
+        listBooks({ isbn: value }).then(res => {
+          const existingBooks = res.rows.filter(book => book.textbookId !== form.value.textbookId)
+          if (existingBooks.length > 0) {
+            callback(new Error('该ISBN号已存在'))
+          } else {
+            callback()
+          }
+        })
+      }
+    })
+  } else {
+    // 添加模式：直接检查ISBN是否已存在
+    listBooks({ isbn: value }).then(res => {
+      if (res.rows.length > 0) {
+        callback(new Error('该ISBN号已存在'))
+      } else {
+        callback()
+      }
+    })
+  }
+}
+
 // 取消按钮
 function cancel() {
   open.value = false
@@ -392,31 +432,61 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["booksRef"].validate(valid => {
     if (valid) {
-      // 确保创建人字段始终为当前用户ID
-      form.value.createdBy = userStore.id
-      // 确保创建时间为当前日期
-      if (!form.value.createdAt) {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        form.value.createdAt = `${year}-${month}-${day}`;
-      }
-      if (form.value.textbookId != null) {
-        updateBooks(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
-          open.value = false
-          getList()
-        })
-      } else {
-        addBooks(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
-          open.value = false
-          getList()
-        })
-      }
+      // 验证ISBN唯一性
+      checkISBNExists(form.value.isbn, form.value.textbookId).then(isbnExists => {
+        if (isbnExists) {
+          proxy.$modal.msgError("该ISBN号已存在");
+          return;
+        }
+        
+        // 确保创建人字段始终为当前用户ID
+        form.value.createdBy = userStore.id
+        // 确保创建时间为当前日期
+        if (!form.value.createdAt) {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          form.value.createdAt = `${year}-${month}-${day}`;
+        }
+        if (form.value.textbookId != null) {
+          updateBooks(form.value).then(response => {
+            proxy.$modal.msgSuccess("修改成功")
+            open.value = false
+            getList()
+          })
+        } else {
+          addBooks(form.value).then(response => {
+            proxy.$modal.msgSuccess("新增成功")
+            open.value = false
+            getList()
+          })
+        }
+      }).catch(error => {
+        console.error("验证ISBN唯一性时出错:", error);
+        proxy.$modal.msgError("验证ISBN唯一性时出错");
+      });
     }
   })
+}
+
+/** 检查ISBN是否已存在 */
+function checkISBNExists(isbn, currentTextbookId = null) {
+  return new Promise((resolve, reject) => {
+    listBooks({ isbn: isbn }).then(res => {
+      let exists = false;
+      if (currentTextbookId) {
+        // 编辑模式：检查除当前教材外是否还有其他教材使用相同的ISBN
+        exists = res.rows.some(book => book.textbookId !== currentTextbookId);
+      } else {
+        // 添加模式：检查是否有任何教材使用相同的ISBN
+        exists = res.rows.length > 0;
+      }
+      resolve(exists);
+    }).catch(error => {
+      reject(error);
+    });
+  });
 }
 
 /** 删除按钮操作 */

@@ -20,6 +20,15 @@ public interface SysUserMapper
     public List<SysUser> selectUserList(SysUser sysUser);
 
     /**
+     * 根据角色ID查询用户列表
+     *
+     * @param sysUser 用户信息
+     * @param roleId 角色ID
+     * @return 用户信息集合信息
+     */
+    public List<SysUser> selectUsersByRoleId(@Param("sysUser") SysUser sysUser, @Param("roleId") Long roleId);
+
+    /**
      * 根据条件分页查询已配用户角色列表
      * 
      * @param user 用户信息

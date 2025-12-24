@@ -181,7 +181,7 @@
       <el-table-column label="课程名称" align="center" prop="courseName" />
       <el-table-column label="授课班级" align="center" prop="classId" />
       <el-table-column label="申请数量" align="center" prop="quantity" />
-      <el-table-column label="状态" align="center" prop="status" v-if="hasStatusPermission">
+      <el-table-column label="状态" align="center" prop="status">
         <template #default="scope">
           <dict-tag :options="textbook_status" :value="scope.row.status"/>
         </template>
@@ -377,19 +377,10 @@ const { proxy } = getCurrentInstance()
 const { textbook_status } = proxy.useDict('textbook_status')
 const userStore = useUserStore()
 
-// 检查用户是否有权限查看状态
-const hasStatusPermission = computed(() => {
-  // 默认情况下，只有特定角色才能查看状态
-  return userStore.roles.includes('admin') ||
-         userStore.roles.includes('教材管理员') ||
-         userStore.permissions.includes('system:requests:status')
-})
-
 // 检查用户是否有审核权限
 const hasReviewPermission = computed(() => {
   // 只有特定角色才能进行审核操作
   return userStore.roles.includes('admin') ||
-         userStore.roles.includes('教材管理员') ||
          userStore.permissions.includes('system:requests:review')
 })
 

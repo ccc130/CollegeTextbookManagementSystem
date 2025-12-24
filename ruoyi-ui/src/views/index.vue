@@ -209,20 +209,17 @@ let trendChart = null
 // 计算权限
 const hasTextbookPermission = computed(() => {
   return userStore.roles.includes('admin') || 
-         userStore.roles.includes('教材管理员') || 
-         userStore.permissions.includes('textbook:books:list')
+         userStore.permissions.includes('textbook:books:list')|| 
+         userStore.permissions.includes('system:inventory:list')
 })
 
 const hasInventoryPermission = computed(() => {
   return userStore.roles.includes('admin') || 
-         userStore.roles.includes('教材管理员') || 
          userStore.permissions.includes('system:inventory:list')
 })
 
 const hasRequestPermission = computed(() => {
   return userStore.roles.includes('admin') || 
-         userStore.roles.includes('教材管理员') || 
-         userStore.roles.includes('学院管理员') || 
          userStore.permissions.includes('system:requests:list')
 })
 
