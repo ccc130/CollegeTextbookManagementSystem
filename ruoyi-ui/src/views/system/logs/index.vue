@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="操作类型" prop="operation">
-        <el-select v-model="queryParams.operation" placeholder="请选择操作类型" clearable>
+        <el-select v-model="queryParams.operation" placeholder="请选择操作类型" clearable style="width: 120px;">
           <el-option
             v-for="dict in textbook_operation"
             :key="dict.value"
