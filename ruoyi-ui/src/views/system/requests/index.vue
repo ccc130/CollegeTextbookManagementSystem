@@ -365,6 +365,7 @@
 
 <script setup name="Requests">
 import { listRequests, getRequests, delRequests, addRequests, updateRequests } from "@/api/system/requests"
+
 import useUserStore from '@/store/modules/user'
 import { listBooks } from "@/api/textbook/books"
 import { listDept } from "@/api/system/dept"
@@ -412,7 +413,7 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    teacherId: null,
+    teacherId: hasReviewPermission.value ? null : userStore.id, // 无审核权限时，默认只显示当前用户申请的记录
     textbookId: null,
     courseName: null,
     classId: null,
@@ -436,9 +437,6 @@ const data = reactive({
       { required: true, message: "申请数量不能为空", trigger: "blur" },
       { pattern: /^[1-9]\d*$/, message: "申请数量必须为大于0的整数", trigger: "blur" },
       { validator: validateQuantityAgainstInventory, trigger: "blur" }
-    ],
-    collegeId: [
-      { required: true, message: "所属学院不能为空", trigger: "blur" }
     ],
   }
 })
@@ -635,11 +633,20 @@ function updateInventoryOnApproval(requestData) {
     const inventoryData = inventoryResponse.data || {};
     
     // 更新库存数量
+    const newTotalQuantity = (inventoryData.totalQuantity || 0) + parseInt(requestData.quantity);
+    const newAvailableQuantity = (inventoryData.availableQuantity || 0) + parseInt(requestData.quantity);
+    
+    // 验证总数量是否大于等于可领用数量
+    if (newTotalQuantity < newAvailableQuantity) {
+      proxy.$modal.msgError('库存更新失败：总数量不能小于可领用数量');
+      return;
+    }
+    
     const updatedInventory = {
       inventoryId: inventoryData.inventoryId,
       textbookId: requestData.textbookId,
-      totalQuantity: (inventoryData.totalQuantity || 0) + parseInt(requestData.quantity),
-      availableQuantity: (inventoryData.availableQuantity || 0) + parseInt(requestData.quantity)
+      totalQuantity: newTotalQuantity,
+      availableQuantity: newAvailableQuantity
     };
     
     // 只有当库存记录存在时才更新，否则提示错误
@@ -722,6 +729,10 @@ function handleQuery() {
 /** 重置按钮操作 */
 function resetQuery() {
   proxy.resetForm("queryRef")
+  // 无审核权限时，重置查询后仍应只显示当前用户申请的记录
+  if (!hasReviewPermission.value) {
+    queryParams.value.teacherId = userStore.id
+  }
   handleQuery()
 }
 
@@ -855,6 +866,10 @@ function handleExport() {
 
 onMounted(() => {
   console.log('Initializing component...');
+  // 无审核权限时，初始化时也应只显示当前用户申请的记录
+  if (!hasReviewPermission.value) {
+    queryParams.value.teacherId = userStore.id
+  }
   getList()
   getTextbookList()
   getClassList()
@@ -863,5 +878,4 @@ onMounted(() => {
   getInventoryList() // 获取库存信息
   console.log('Component initialized.');
 })
-
 </script>

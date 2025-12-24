@@ -45,8 +45,8 @@ public class TextbookBooks extends BaseEntity
     @Excel(name = "教材类型")
     private Long categoryId;
 
-    /** 版次（如 第3版） */
-    @Excel(name = "版次", readConverterExp = "如=,第=3版")
+    /** 版次 */
+    @Excel(name = "版次")
     private String edition;
 
     /** 定价 */

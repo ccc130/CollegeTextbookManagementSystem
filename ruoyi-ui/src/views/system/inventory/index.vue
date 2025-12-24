@@ -149,16 +149,44 @@ const data = reactive({
     ],
     totalQuantity: [
       { required: true, message: "总数量不能为空", trigger: "blur" },
-      { type: "number", min: 0, message: "总数量必须大于等于0", trigger: "blur" }
+      { type: "number", min: 0, message: "总数量必须大于等于0", trigger: "blur" },
+      { validator: validateTotalQuantity, trigger: "blur" }
     ],
     availableQuantity: [
       { required: true, message: "可领用数量不能为空", trigger: "blur" },
-      { type: "number", min: 0, message: "可领用数量必须大于等于0", trigger: "blur" }
+      { type: "number", min: 0, message: "可领用数量必须大于等于0", trigger: "blur" },
+      { validator: validateAvailableQuantity, trigger: "blur" }
     ]
   }
 })
 
 const { queryParams, form, rules } = toRefs(data)
+
+// 验证总数量不能小于可领用数量
+function validateTotalQuantity(rule, value, callback) {
+  if (value !== null && value !== undefined && form.value.availableQuantity !== null && form.value.availableQuantity !== undefined) {
+    if (parseInt(value) < parseInt(form.value.availableQuantity)) {
+      callback(new Error("总数量不能小于可领用数量"));
+    } else {
+      callback();
+    }
+  } else {
+    callback();
+  }
+}
+
+// 验证可领用数量不能大于总数量
+function validateAvailableQuantity(rule, value, callback) {
+  if (value !== null && value !== undefined && form.value.totalQuantity !== null && form.value.totalQuantity !== undefined) {
+    if (parseInt(value) > parseInt(form.value.totalQuantity)) {
+      callback(new Error("可领用数量不能大于总数量"));
+    } else {
+      callback();
+    }
+  } else {
+    callback();
+  }
+}
 
 /** 查询教材列表 */
 function getTextbookList() {
@@ -264,11 +292,19 @@ function submitForm() {
           updateInventory(form.value).then(response => {
             proxy.$modal.msgSuccess("修改成功")
             
-            // 记录库存变化日志
+            // 记录总数量变化日志
             if (totalQuantityDiff !== 0) {
               const operationType = totalQuantityDiff > 0 ? '0' : '1'; // 0: 入库, 1: 出库
               const quantity = Math.abs(totalQuantityDiff);
-              const notes = `库存数量变更: ${originalData.totalQuantity || 0} -> ${form.value.totalQuantity}`;
+              const notes = `总库存数量变更: ${originalData.totalQuantity || 0} -> ${form.value.totalQuantity}`;
+              addLogRecord(form.value.textbookId, operationType, quantity, notes);
+            }
+            
+            // 记录可用数量变化日志
+            if (availableQuantityDiff !== 0) {
+              const operationType = availableQuantityDiff > 0 ? '0' : '1'; // 0: 入库, 1: 出库
+              const quantity = Math.abs(availableQuantityDiff);
+              const notes = `可用库存数量变更: ${originalData.availableQuantity || 0} -> ${form.value.availableQuantity}`;
               addLogRecord(form.value.textbookId, operationType, quantity, notes);
             }
             
