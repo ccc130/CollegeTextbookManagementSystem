@@ -11,7 +11,7 @@
  Target Server Version : 80200
  File Encoding         : 65001
 
- Date: 24/12/2025 16:12:56
+ Date: 24/12/2025 18:09:18
 */
 
 SET NAMES utf8mb4;
@@ -78,6 +78,7 @@ INSERT INTO `sys_dept` VALUES (103, 101, '0,100,101', '计科2201', 1, '', '', '
 INSERT INTO `sys_dept` VALUES (104, 101, '0,100,101', '计科2202', 2, '', '', '', '0', '0', 'admin', '2025-12-22 08:17:49', 'admin', '2025-12-23 08:34:21');
 INSERT INTO `sys_dept` VALUES (105, 101, '0,100,101', '计科2203', 3, '', '', '', '0', '0', 'admin', '2025-12-22 08:17:49', 'admin', '2025-12-23 08:34:32');
 INSERT INTO `sys_dept` VALUES (106, 101, '0,100,101', '计科2204', 4, '', '', '', '0', '0', 'admin', '2025-12-22 08:17:49', 'admin', '2025-12-23 08:34:43');
+INSERT INTO `sys_dept` VALUES (200, 101, '0,100,101', '12', 0, NULL, NULL, NULL, '0', '0', 'admin', '2025-12-24 17:19:25', '', NULL);
 
 -- ----------------------------
 -- Table structure for sys_dict_data
@@ -317,6 +318,10 @@ INSERT INTO `sys_logininfor` VALUES (172, 'admin', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_logininfor` VALUES (173, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 11:00:43');
 INSERT INTO `sys_logininfor` VALUES (174, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 16:03:45');
 INSERT INTO `sys_logininfor` VALUES (175, '13', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 16:03:49');
+INSERT INTO `sys_logininfor` VALUES (176, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 18:05:18');
+INSERT INTO `sys_logininfor` VALUES (177, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 18:07:53');
+INSERT INTO `sys_logininfor` VALUES (178, '13', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 18:07:58');
+INSERT INTO `sys_logininfor` VALUES (179, '13', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 18:08:20');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -630,6 +635,11 @@ INSERT INTO `sys_oper_log` VALUES (236, '教材库存', 2, 'com.ruoyi.system.con
 INSERT INTO `sys_oper_log` VALUES (237, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, '13', '计科2201', '/system/requests', '127.0.0.1', '内网IP', '{\"courseName\":\"123\",\"params\":{},\"quantity\":\"1\",\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":102,\"textbookId\":2}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\r\n### The error may exist in file [D:\\project\\java\\CollegeTextbookManagementSystem\\ruoyi-system\\target\\classes\\mapper\\system\\TextbookOrderRequestsMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.TextbookOrderRequestsMapper.insertTextbookOrderRequests-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into textbook_order_requests          ( teacher_id,             textbook_id,             course_name,                          quantity,             status,                          submitted_at )           values ( ?,             ?,             ?,                          ?,             ?,                          ? )\r\n### Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\n; Field \'college_id\' doesn\'t have a default value; nested exception is java.sql.SQLException: Field \'college_id\' doesn\'t have a default value', '2025-12-24 16:05:26', 112);
 INSERT INTO `sys_oper_log` VALUES (238, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, '13', '计科2201', '/system/requests', '127.0.0.1', '内网IP', '{\"courseName\":\"123\",\"params\":{},\"quantity\":\"1\",\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":102,\"textbookId\":2}', NULL, 1, '\r\n### Error updating database.  Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\r\n### The error may exist in file [D:\\project\\java\\CollegeTextbookManagementSystem\\ruoyi-system\\target\\classes\\mapper\\system\\TextbookOrderRequestsMapper.xml]\r\n### The error may involve com.ruoyi.system.mapper.TextbookOrderRequestsMapper.insertTextbookOrderRequests-Inline\r\n### The error occurred while setting parameters\r\n### SQL: insert into textbook_order_requests          ( teacher_id,             textbook_id,             course_name,                          quantity,             status,                          submitted_at )           values ( ?,             ?,             ?,                          ?,             ?,                          ? )\r\n### Cause: java.sql.SQLException: Field \'college_id\' doesn\'t have a default value\n; Field \'college_id\' doesn\'t have a default value; nested exception is java.sql.SQLException: Field \'college_id\' doesn\'t have a default value', '2025-12-24 16:05:29', 5);
 INSERT INTO `sys_oper_log` VALUES (239, '征订申请', 1, 'com.ruoyi.system.controller.TextbookOrderRequestsController.add()', 'POST', 1, '13', '计科2201', '/system/requests', '127.0.0.1', '内网IP', '{\"courseName\":\"123\",\"params\":{},\"quantity\":\"1\",\"requestId\":5,\"status\":0,\"submittedAt\":\"2025-12-24\",\"teacherId\":102,\"textbookId\":2}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 16:05:56', 6);
+INSERT INTO `sys_oper_log` VALUES (240, '部门管理', 1, 'com.ruoyi.web.controller.system.SysDeptController.add()', 'POST', 1, 'admin', '研发部门', '/system/dept', '127.0.0.1', '内网IP', '{\"ancestors\":\"0,100,101\",\"children\":[],\"createBy\":\"admin\",\"deptName\":\"12\",\"orderNum\":0,\"params\":{},\"parentId\":101,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 17:19:25', 114);
+INSERT INTO `sys_oper_log` VALUES (241, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"4\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"deptIds\":[],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:05:28', 20);
+INSERT INTO `sys_oper_log` VALUES (242, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":false,\"deptIds\":[101,103],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:06:07', 9);
+INSERT INTO `sys_oper_log` VALUES (243, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"deptIds\":[100,101,103],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:06:24', 10);
+INSERT INTO `sys_oper_log` VALUES (244, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":false,\"deptIds\":[101,200,103,104,105,106],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:06:41', 9);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -680,10 +690,10 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '系统管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2025-12-22 08:17:49', '', NULL, '超级管理员');
 INSERT INTO `sys_role` VALUES (2, '教材管理员', 'admin1', 2, '1', 0, 1, '0', '0', 'admin', '2025-12-22 08:17:49', 'admin', '2025-12-24 10:29:29', '普通角色');
+INSERT INTO `sys_role` VALUES (10, '系统管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2025-12-22 08:17:49', '', NULL, '超级管理员');
 INSERT INTO `sys_role` VALUES (100, '学院管理员', 'admin2', 3, '4', 1, 1, '0', '0', 'admin', '2025-12-23 08:38:12', 'admin', '2025-12-24 10:58:44', NULL);
-INSERT INTO `sys_role` VALUES (101, '任课老师', 'teacher', 4, '5', 0, 1, '0', '0', 'admin', '2025-12-23 08:38:42', 'admin', '2025-12-24 15:46:10', NULL);
+INSERT INTO `sys_role` VALUES (101, '任课老师', 'teacher', 4, '2', 0, 0, '0', '0', 'admin', '2025-12-23 08:38:42', 'admin', '2025-12-24 18:06:41', NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_dept
@@ -694,6 +704,16 @@ CREATE TABLE `sys_role_dept`  (
   `dept_id` bigint(0) NOT NULL COMMENT '部门ID',
   PRIMARY KEY (`role_id`, `dept_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色和部门关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_role_dept
+-- ----------------------------
+INSERT INTO `sys_role_dept` VALUES (101, 101);
+INSERT INTO `sys_role_dept` VALUES (101, 103);
+INSERT INTO `sys_role_dept` VALUES (101, 104);
+INSERT INTO `sys_role_dept` VALUES (101, 105);
+INSERT INTO `sys_role_dept` VALUES (101, 106);
+INSERT INTO `sys_role_dept` VALUES (101, 200);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -847,11 +867,11 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 101, 'admin', 'ccc', '00', 'ry@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-24 11:00:30', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', '2025-12-24 11:00:29', '管理员');
+INSERT INTO `sys_user` VALUES (1, 101, 'admin', 'ccc', '00', 'ry@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-24 18:05:19', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', '2025-12-24 18:05:18', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', 'ccc', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-22 08:17:49', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', NULL, '测试员');
 INSERT INTO `sys_user` VALUES (100, 100, '11', '11', '00', '', '', '0', '', '$2a$10$E4Ll4pSKVot0E1CwuCSDj.dYbTzCbTgzHS5UgxuVwyS7bHhmEahSe', '0', '0', '127.0.0.1', '2025-12-24 10:29:37', NULL, 'admin', '2025-12-23 09:18:10', '', '2025-12-24 10:29:36', NULL);
 INSERT INTO `sys_user` VALUES (101, 101, '12', '12', '00', '', '', '0', '', '$2a$10$Lk98Xyv2BhsozQXp6.lDA.SkHfBRKeduJl5ZbmYbCJuVT2Rab.20e', '0', '0', '127.0.0.1', '2025-12-24 10:36:35', NULL, 'admin', '2025-12-23 09:18:21', '', '2025-12-24 10:36:35', NULL);
-INSERT INTO `sys_user` VALUES (102, 103, '13', '13', '00', '', '', '0', '', '$2a$10$/AB6VvoBva8DeaJW/r/vFOzgxhNPQH/SD7W.Fri6V0x21I.F0/zQm', '0', '0', '127.0.0.1', '2025-12-24 16:03:49', NULL, 'admin', '2025-12-23 09:18:53', '', '2025-12-24 16:03:49', NULL);
+INSERT INTO `sys_user` VALUES (102, 103, '13', '13', '00', '', '', '0', '', '$2a$10$/AB6VvoBva8DeaJW/r/vFOzgxhNPQH/SD7W.Fri6V0x21I.F0/zQm', '0', '0', '127.0.0.1', '2025-12-24 18:07:59', NULL, 'admin', '2025-12-23 09:18:53', '', '2025-12-24 18:07:58', NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_post
