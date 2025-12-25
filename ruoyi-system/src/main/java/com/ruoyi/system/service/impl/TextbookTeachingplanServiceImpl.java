@@ -22,13 +22,13 @@ public class TextbookTeachingplanServiceImpl implements ITextbookTeachingplanSer
     /**
      * 查询教学计划
      * 
-     * @param PlanID 教学计划主键
+     * @param planid 教学计划主键
      * @return 教学计划
      */
     @Override
-    public TextbookTeachingplan selectTextbookTeachingplanByPlanID(Long PlanID)
+    public TextbookTeachingplan selectTextbookTeachingplanByPlanid(Long planid)
     {
-        return textbookTeachingplanMapper.selectTextbookTeachingplanByPlanID(PlanID);
+        return textbookTeachingplanMapper.selectTextbookTeachingplanByPlanid(planid);
     }
 
     /**
@@ -70,24 +70,24 @@ public class TextbookTeachingplanServiceImpl implements ITextbookTeachingplanSer
     /**
      * 批量删除教学计划
      * 
-     * @param PlanIDs 需要删除的教学计划主键
+     * @param planids 需要删除的教学计划主键
      * @return 结果
      */
     @Override
-    public int deleteTextbookTeachingplanByPlanIDs(Long[] PlanIDs)
+    public int deleteTextbookTeachingplanByPlanids(Long[] planids)
     {
-        return textbookTeachingplanMapper.deleteTextbookTeachingplanByPlanIDs(PlanIDs);
+        return textbookTeachingplanMapper.deleteTextbookTeachingplanByPlanids(planids);
     }
 
     /**
      * 删除教学计划信息
      * 
-     * @param PlanID 教学计划主键
+     * @param planid 教学计划主键
      * @return 结果
      */
     @Override
-    public int deleteTextbookTeachingplanByPlanID(Long PlanID)
+    public int deleteTextbookTeachingplanByPlanid(Long planid)
     {
-        return textbookTeachingplanMapper.deleteTextbookTeachingplanByPlanID(PlanID);
+        return textbookTeachingplanMapper.deleteTextbookTeachingplanByPlanid(planid);
     }
 }

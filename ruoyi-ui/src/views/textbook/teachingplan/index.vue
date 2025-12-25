@@ -9,46 +9,37 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="授课班级" prop="classId">
-        <el-tree-select
-          v-model="queryParams.classId"
-          :data="classOptions"
-          :props="{ value: 'deptId', label: 'deptName', children: 'children' }"
-          value-key="deptId"
-          placeholder="请选择授课班级"
+      <el-form-item label="课程id" prop="courseid">
+        <el-input
+          v-model="queryParams.courseid"
+          placeholder="请输入课程id"
           clearable
-          filterable
+          @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="课程名称" prop="courseId">
-        <el-select 
-          v-model="queryParams.courseId" 
-          placeholder="请选择课程" 
-          clearable 
-          filterable
-        >
-          <el-option
-            v-for="item in courseOptions"
-            :key="item.courseId"
-            :label="item.courseName"
-            :value="item.courseId"
-          />
-        </el-select>
+      <el-form-item label="班级id" prop="classid">
+        <el-input
+          v-model="queryParams.classid"
+          placeholder="请输入班级id"
+          clearable
+          @keyup.enter="handleQuery"
+        />
       </el-form-item>
-      <el-form-item label="任课教师" prop="teacherId">
-        <el-select 
-          v-model="queryParams.teacherId" 
-          placeholder="请选择任课教师" 
-          clearable 
-          filterable
-        >
-          <el-option
-            v-for="item in teacherOptions"
-            :key="item.userId"
-            :label="item.userName"
-            :value="item.userId"
-          />
-        </el-select>
+      <el-form-item label="教师id" prop="teacherid">
+        <el-input
+          v-model="queryParams.teacherid"
+          placeholder="请输入教师id"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="学生数量" prop="studentcount">
+        <el-input
+          v-model="queryParams.studentcount"
+          placeholder="请输入学生数量"
+          clearable
+          @keyup.enter="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -100,29 +91,12 @@
 
     <el-table v-loading="loading" :data="teachingplanList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="计划ID" align="center" prop="planId" />
+      <el-table-column label="计划id" align="center" prop="planid" />
       <el-table-column label="学期" align="center" prop="semester" />
-      <el-table-column label="授课班级" align="center" prop="classId">
-        <template #default="scope">
-          {{ getClassNameById(scope.row.classId) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="课程名称" align="center" prop="courseId">
-        <template #default="scope">
-          {{ getCourseNameById(scope.row.courseId) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="任课教师" align="center" prop="teacherId">
-        <template #default="scope">
-          {{ getTeacherNameById(scope.row.teacherId) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="学生数量" align="center" prop="studentCount" />
-      <el-table-column label="教材需求" align="center">
-        <template #default="scope">
-          <el-button link type="primary" @click="handleViewTextbooks(scope.row)" v-hasPermi="['textbook:teachingplan:viewTextbooks']">查看教材</el-button>
-        </template>
-      </el-table-column>
+      <el-table-column label="课程id" align="center" prop="courseid" />
+      <el-table-column label="班级id" align="center" prop="classid" />
+      <el-table-column label="教师id" align="center" prop="teacherid" />
+      <el-table-column label="学生数量" align="center" prop="studentcount" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['textbook:teachingplan:edit']">修改</el-button>
@@ -141,53 +115,21 @@
 
     <!-- 添加或修改教学计划对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="teachingplanRef" :model="form" :rules="rules" label-width="100px">
+      <el-form ref="teachingplanRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="学期" prop="semester">
-          <el-input v-model="form.semester" placeholder="请输入学期，如：2024-2025-1" />
+          <el-input v-model="form.semester" placeholder="请输入学期" />
         </el-form-item>
-        <el-form-item label="授课班级" prop="classId">
-          <el-tree-select
-            v-model="form.classId"
-            :data="classOptions"
-            :props="{ value: 'deptId', label: 'deptName', children: 'children' }"
-            value-key="deptId"
-            placeholder="请选择授课班级"
-            clearable
-            filterable
-          />
+        <el-form-item label="课程id" prop="courseid">
+          <el-input v-model="form.courseid" placeholder="请输入课程id" />
         </el-form-item>
-        <el-form-item label="课程名称" prop="courseId">
-          <el-select 
-            v-model="form.courseId" 
-            placeholder="请选择课程" 
-            clearable 
-            filterable
-          >
-            <el-option
-              v-for="item in courseOptions"
-              :key="item.courseId"
-              :label="item.courseName"
-              :value="item.courseId"
-            />
-          </el-select>
+        <el-form-item label="班级id" prop="classid">
+          <el-input v-model="form.classid" placeholder="请输入班级id" />
         </el-form-item>
-        <el-form-item label="任课教师" prop="teacherId">
-          <el-select 
-            v-model="form.teacherId" 
-            placeholder="请选择任课教师" 
-            clearable 
-            filterable
-          >
-            <el-option
-              v-for="item in teacherOptions"
-              :key="item.userId"
-              :label="item.userName"
-              :value="item.userId"
-            />
-          </el-select>
+        <el-form-item label="教师id" prop="teacherid">
+          <el-input v-model="form.teacherid" placeholder="请输入教师id" />
         </el-form-item>
-        <el-form-item label="学生数量" prop="studentCount">
-          <el-input v-model="form.studentCount" placeholder="请输入学生数量" />
+        <el-form-item label="学生数量" prop="studentcount">
+          <el-input v-model="form.studentcount" placeholder="请输入学生数量" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -197,37 +139,11 @@
         </div>
       </template>
     </el-dialog>
-    
-    <!-- 查看教材对话框 -->
-    <el-dialog title="教材信息" v-model="textbookDialogVisible" width="700px" append-to-body>
-      <el-table v-loading="textbookLoading" :data="textbookList">
-        <el-table-column label="教材ID" align="center" prop="textbookId" />
-        <el-table-column label="教材名称" align="center" prop="title" />
-        <el-table-column label="ISBN" align="center" prop="isbn" />
-        <el-table-column label="作者" align="center" prop="author" />
-        <el-table-column label="出版社" align="center" prop="publisherId">
-          <template #default="scope">
-            {{ getPublisherNameById(scope.row.publisherId) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="所需数量" align="center" prop="requiredQuantity" />
-      </el-table>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="textbookDialogVisible = false">关 闭</el-button>
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
-<script setup name="TeachingPlanList">
+<script setup name="Teachingplan">
 import { listTeachingplan, getTeachingplan, delTeachingplan, addTeachingplan, updateTeachingplan } from "@/api/textbook/teachingplan"
-import { listCourse } from "@/api/textbook/course"
-import { listUser } from "@/api/system/user"
-import { listDept } from "@/api/system/dept"
-import { listBooks } from "@/api/textbook/books"
-import { listPublishers } from "@/api/system/publishers"
 
 const { proxy } = getCurrentInstance()
 
@@ -240,15 +156,6 @@ const single = ref(true)
 const multiple = ref(true)
 const total = ref(0)
 const title = ref("")
-// 添加教材对话框相关变量
-const textbookDialogVisible = ref(false)
-const textbookLoading = ref(false)
-const textbookList = ref([])
-// 添加选项相关变量
-const courseOptions = ref([])
-const teacherOptions = ref([])
-const classOptions = ref([])
-const publisherOptions = ref([])
 
 const data = reactive({
   form: {},
@@ -256,27 +163,12 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     semester: null,
-    classId: null,
-    courseId: null,
-    teacherId: null,
+    courseid: null,
+    classid: null,
+    teacherid: null,
+    studentcount: null
   },
   rules: {
-    semester: [
-      { required: true, message: "学期不能为空", trigger: "blur" }
-    ],
-    classId: [
-      { required: true, message: "授课班级不能为空", trigger: "change" }
-    ],
-    courseId: [
-      { required: true, message: "课程名称不能为空", trigger: "change" }
-    ],
-    teacherId: [
-      { required: true, message: "任课教师不能为空", trigger: "change" }
-    ],
-    studentCount: [
-      { required: true, message: "学生数量不能为空", trigger: "blur" },
-      { pattern: /^[1-9]\d*$/, message: "学生数量必须为正整数", trigger: "blur" }
-    ]
   }
 })
 
@@ -292,134 +184,6 @@ function getList() {
   })
 }
 
-/** 查询课程列表 */
-function getCourseList() {
-  listCourse({ pageSize: 1000 }).then(response => {
-    courseOptions.value = response.rows.map(course => ({
-      courseId: course.CourseID,
-      courseName: course.CourseName
-    }))
-  })
-}
-
-/** 查询教师列表 */
-function getTeacherList() {
-  listUser({ pageSize: 1000 }).then(response => {
-    teacherOptions.value = response.rows
-  })
-}
-
-/** 查询班级列表 */
-function getClassList() {
-  listDept().then(response => {
-    classOptions.value = proxy.handleTree(response.data, "deptId")
-  })
-}
-
-/** 查询出版社列表 */
-function getPublisherList() {
-  listPublishers({ pageSize: 1000 }).then(response => {
-    publisherOptions.value = response.rows
-  })
-}
-
-// 根据ID获取班级名称
-function getClassNameById(classId) {
-  if (!classId) return '';
-  
-  // 递归查找部门名称
-  function findDeptName(depts, id) {
-    for (const dept of depts) {
-      if (dept.deptId == id || dept.id == id) {
-        return dept.deptName || dept.label;
-      }
-      if (dept.children) {
-        const found = findDeptName(dept.children, id);
-        if (found) return found;
-      }
-    }
-    return id;
-  }
-  
-  return findDeptName(classOptions.value, classId);
-}
-
-// 根据ID获取课程名称
-function getCourseNameById(courseId) {
-  if (!courseId) return '';
-  
-  const course = courseOptions.value.find(item => item.courseId == courseId);
-  return course ? course.courseName : courseId;
-}
-
-// 根据ID获取教师名称
-function getTeacherNameById(teacherId) {
-  if (!teacherId) return '';
-  
-  const teacher = teacherOptions.value.find(item => item.userId == teacherId);
-  return teacher ? teacher.userName : teacherId;
-}
-
-// 根据ID获取出版社名称
-function getPublisherNameById(publisherId) {
-  if (!publisherId) return '';
-  
-  const publisher = publisherOptions.value.find(item => item.publisherId == publisherId);
-  return publisher ? publisher.publisherName : publisherId;
-}
-
-// 查看教材信息
-async function handleViewTextbooks(row) {
-  textbookDialogVisible.value = true
-  textbookLoading.value = true
-  
-  try {
-    // 这里应该根据教学计划获取相关的教材信息
-    // 通过征订申请获取教材信息
-    const { listRequests } = await import("@/api/system/requests")
-    const response = await listRequests({ 
-      courseId: row.courseId, 
-      classId: row.classId,
-      teacherId: row.teacherId,
-      pageSize: 1000 
-    })
-    
-    // 获取教材信息
-    const textbookIds = [...new Set(response.rows.map(req => req.textbookId))]
-    if (textbookIds.length > 0) {
-      const textbookDetails = []
-      for (const textbookId of textbookIds) {
-        const { getBooks } = await import("@/api/textbook/books")
-        try {
-          const textbookResp = await getBooks(textbookId)
-          const textbook = textbookResp.data
-          
-          // 计算该教材的总需求数量
-          const requiredQuantity = response.rows
-            .filter(req => req.textbookId === textbookId)
-            .reduce((sum, req) => sum + parseInt(req.quantity || 0), 0)
-          
-          textbookDetails.push({
-            ...textbook,
-            requiredQuantity: requiredQuantity
-          })
-        } catch (error) {
-          console.error(`获取教材信息失败: ${textbookId}`, error)
-        }
-      }
-      
-      textbookList.value = textbookDetails
-    } else {
-      textbookList.value = []
-    }
-  } catch (error) {
-    console.error('获取教材信息失败', error)
-    textbookList.value = []
-  } finally {
-    textbookLoading.value = false
-  }
-}
-
 // 取消按钮
 function cancel() {
   open.value = false
@@ -429,12 +193,12 @@ function cancel() {
 // 表单重置
 function reset() {
   form.value = {
-    planId: null,
+    planid: null,
     semester: null,
-    classId: null,
-    courseId: null,
-    teacherId: null,
-    studentCount: null
+    courseid: null,
+    classid: null,
+    teacherid: null,
+    studentcount: null
   }
   proxy.resetForm("teachingplanRef")
 }
@@ -453,7 +217,7 @@ function resetQuery() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.planId)
+  ids.value = selection.map(item => item.planid)
   single.value = selection.length != 1
   multiple.value = !selection.length
 }
@@ -468,8 +232,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset()
-  const _planId = row.planId || ids.value
-  getTeachingplan(_planId).then(response => {
+  const _planid = row.planid || ids.value
+  getTeachingplan(_planid).then(response => {
     form.value = response.data
     open.value = true
     title.value = "修改教学计划"
@@ -480,7 +244,7 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["teachingplanRef"].validate(valid => {
     if (valid) {
-      if (form.value.planId != null) {
+      if (form.value.planid != null) {
         updateTeachingplan(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功")
           open.value = false
@@ -499,9 +263,9 @@ function submitForm() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const _planIds = row.planId || ids.value
-  proxy.$modal.confirm('是否确认删除教学计划编号为"' + _planIds + '"的数据项？').then(function() {
-    return delTeachingplan(_planIds)
+  const _planids = row.planid || ids.value
+  proxy.$modal.confirm('是否确认删除教学计划编号为"' + _planids + '"的数据项？').then(function() {
+    return delTeachingplan(_planids)
   }).then(() => {
     getList()
     proxy.$modal.msgSuccess("删除成功")
@@ -515,11 +279,5 @@ function handleExport() {
   }, `teachingplan_${new Date().getTime()}.xlsx`)
 }
 
-onMounted(() => {
-  getList()
-  getCourseList()
-  getTeacherList()
-  getClassList()
-  getPublisherList()
-})
+getList()
 </script>

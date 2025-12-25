@@ -16,97 +16,97 @@ public class TextbookCourse extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 课程id */
-    private Long CourseID;
+    private Long courseId;
 
     /** 课程名称 */
     @Excel(name = "课程名称")
-    private String CourseName;
+    private String coursename;
 
     /** 课程代码 */
     @Excel(name = "课程代码")
-    private String CourseCode;
+    private String coursecode;
 
     /** 学分 */
     @Excel(name = "学分")
-    private Long Credits;
+    private Long credits;
 
     /** 分类 */
     @Excel(name = "分类")
-    private String Category;
+    private String category;
 
     /** 描述 */
     @Excel(name = "描述")
-    private String Description;
+    private String description;
 
-    public void setCourseID(Long CourseID) 
+    public void setCourseId(Long courseId) 
     {
-        this.CourseID = CourseID;
+        this.courseId = courseId;
     }
 
-    public Long getCourseID() 
+    public Long getCourseId() 
     {
-        return CourseID;
+        return courseId;
     }
 
-    public void setCourseName(String CourseName) 
+    public void setCoursename(String coursename) 
     {
-        this.CourseName = CourseName;
+        this.coursename = coursename;
     }
 
-    public String getCourseName() 
+    public String getCoursename() 
     {
-        return CourseName;
+        return coursename;
     }
 
-    public void setCourseCode(String CourseCode) 
+    public void setCoursecode(String coursecode) 
     {
-        this.CourseCode = CourseCode;
+        this.coursecode = coursecode;
     }
 
-    public String getCourseCode() 
+    public String getCoursecode() 
     {
-        return CourseCode;
+        return coursecode;
     }
 
-    public void setCredits(Long Credits) 
+    public void setCredits(Long credits) 
     {
-        this.Credits = Credits;
+        this.credits = credits;
     }
 
     public Long getCredits() 
     {
-        return Credits;
+        return credits;
     }
 
-    public void setCategory(String Category) 
+    public void setCategory(String category) 
     {
-        this.Category = Category;
+        this.category = category;
     }
 
     public String getCategory() 
     {
-        return Category;
+        return category;
     }
 
-    public void setDescription(String Description) 
+    public void setDescription(String description) 
     {
-        this.Description = Description;
+        this.description = description;
     }
 
     public String getDescription() 
     {
-        return Description;
+        return description;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("CourseID", getCourseID())
-            .append("CourseName", getCourseName())
-            .append("CourseCode", getCourseCode())
-            .append("Credits", getCredits())
-            .append("Category", getCategory())
-            .append("Description", getDescription())
+            .append("courseId", getCourseId())
+            .append("coursename", getCoursename())
+            .append("coursecode", getCoursecode())
+            .append("credits", getCredits())
+            .append("category", getCategory())
+            .append("description", getDescription())
             .toString();
     }
 }

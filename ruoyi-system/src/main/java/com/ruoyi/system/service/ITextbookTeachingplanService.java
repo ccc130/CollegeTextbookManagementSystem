@@ -14,10 +14,10 @@ public interface ITextbookTeachingplanService
     /**
      * 查询教学计划
      * 
-     * @param PlanID 教学计划主键
+     * @param planid 教学计划主键
      * @return 教学计划
      */
-    public TextbookTeachingplan selectTextbookTeachingplanByPlanID(Long PlanID);
+    public TextbookTeachingplan selectTextbookTeachingplanByPlanid(Long planid);
 
     /**
      * 查询教学计划列表
@@ -46,16 +46,16 @@ public interface ITextbookTeachingplanService
     /**
      * 批量删除教学计划
      * 
-     * @param PlanIDs 需要删除的教学计划主键集合
+     * @param planids 需要删除的教学计划主键集合
      * @return 结果
      */
-    public int deleteTextbookTeachingplanByPlanIDs(Long[] PlanIDs);
+    public int deleteTextbookTeachingplanByPlanids(Long[] planids);
 
     /**
      * 删除教学计划信息
      * 
-     * @param PlanID 教学计划主键
+     * @param planid 教学计划主键
      * @return 结果
      */
-    public int deleteTextbookTeachingplanByPlanID(Long PlanID);
+    public int deleteTextbookTeachingplanByPlanid(Long planid);
 }

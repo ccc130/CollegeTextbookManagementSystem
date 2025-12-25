@@ -10,9 +10,9 @@ export function listCourse(query) {
 }
 
 // 查询课程管理详细
-export function getCourse(CourseID) {
+export function getCourse(courseId) {
   return request({
-    url: '/textbook/course/' + CourseID,
+    url: '/textbook/course/' + courseId,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateCourse(data) {
 }
 
 // 删除课程管理
-export function delCourse(CourseID) {
+export function delCourse(courseId) {
   return request({
-    url: '/textbook/course/' + CourseID,
+    url: '/textbook/course/' + courseId,
     method: 'delete'
   })
 }

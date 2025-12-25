@@ -5,71 +5,72 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.system.mapper.TextbookTeachingplanMapper">
     
     <resultMap type="TextbookTeachingplan" id="TextbookTeachingplanResult">
-        <result property="PlanID"    column="PlanID"    />
-        <result property="Semester"    column="Semester"    />
-        <result property="ClassID"    column="ClassID"    />
-        <result property="CourseID"    column="CourseID"    />
-        <result property="TeacherID"    column="TeacherID"    />
-        <result property="StudentCount"    column="StudentCount"    />
+        <result property="planid"    column="planid"    />
+        <result property="semester"    column="semester"    />
+        <result property="courseid"    column="courseid"    />
+        <result property="classid"    column="classid"    />
+        <result property="teacherid"    column="teacherid"    />
+        <result property="studentcount"    column="studentcount"    />
     </resultMap>
 
     <sql id="selectTextbookTeachingplanVo">
-        select PlanID, Semester, ClassID, CourseID, TeacherID, StudentCount from textbook_teachingplan
+        select planid, semester, courseid, classid, teacherid, studentcount from textbook_teachingplan
     </sql>
 
     <select id="selectTextbookTeachingplanList" parameterType="TextbookTeachingplan" resultMap="TextbookTeachingplanResult">
         <include refid="selectTextbookTeachingplanVo"/>
         <where>  
-            <if test="Semester != null  and Semester != ''"> and Semester = #{Semester}</if>
-            <if test="ClassID != null "> and ClassID = #{ClassID}</if>
-            <if test="CourseID != null "> and CourseID = #{CourseID}</if>
-            <if test="TeacherID != null "> and TeacherID = #{TeacherID}</if>
+            <if test="semester != null  and semester != ''"> and semester = #{semester}</if>
+            <if test="courseid != null "> and courseid = #{courseid}</if>
+            <if test="classid != null "> and classid = #{classid}</if>
+            <if test="teacherid != null "> and teacherid = #{teacherid}</if>
+            <if test="studentcount != null "> and studentcount = #{studentcount}</if>
         </where>
     </select>
     
-    <select id="selectTextbookTeachingplanByPlanID" parameterType="Long" resultMap="TextbookTeachingplanResult">
+    <select id="selectTextbookTeachingplanByPlanid" parameterType="Long" resultMap="TextbookTeachingplanResult">
         <include refid="selectTextbookTeachingplanVo"/>
-        where PlanID = #{PlanID}
+        where planid = #{planid}
     </select>
 
-    <insert id="insertTextbookTeachingplan" parameterType="TextbookTeachingplan" useGeneratedKeys="true" keyProperty="PlanID">
+    <insert id="insertTextbookTeachingplan" parameterType="TextbookTeachingplan" useGeneratedKeys="true" keyProperty="planid">
         insert into textbook_teachingplan
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="Semester != null and Semester != ''">Semester,</if>
-            <if test="ClassID != null">ClassID,</if>
-            <if test="CourseID != null">CourseID,</if>
-            <if test="TeacherID != null">TeacherID,</if>
-            <if test="StudentCount != null">StudentCount,</if>
+            <if test="semester != null">semester,</if>
+            <if test="courseid != null">courseid,</if>
+            <if test="classid != null">classid,</if>
+            <if test="teacherid != null">teacherid,</if>
+            <if test="studentcount != null">studentcount,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="Semester != null and Semester != ''">#{Semester},</if>
-            <if test="ClassID != null">#{ClassID},</if>
-            <if test="CourseID != null">#{CourseID},</if>
-            <if test="TeacherID != null">#{TeacherID},</if>
-            <if test="StudentCount != null">#{StudentCount},</if>
+            <if test="semester != null">#{semester},</if>
+            <if test="courseid != null">#{courseid},</if>
+            <if test="classid != null">#{classid},</if>
+            <if test="teacherid != null">#{teacherid},</if>
+            <if test="studentcount != null">#{studentcount},</if>
          </trim>
     </insert>
 
     <update id="updateTextbookTeachingplan" parameterType="TextbookTeachingplan">
         update textbook_teachingplan
         <trim prefix="SET" suffixOverrides=",">
-            <if test="Semester != null and Semester != ''">Semester = #{Semester},</if>
-            <if test="ClassID != null">ClassID = #{ClassID},</if>
-            <if test="CourseID != null">CourseID = #{CourseID},</if>
-            <if test="TeacherID != null">TeacherID = #{TeacherID},</if>
-            <if test="StudentCount != null">StudentCount = #{StudentCount},</if>
+            <if test="semester != null">semester = #{semester},</if>
+            <if test="courseid != null">courseid = #{courseid},</if>
+            <if test="classid != null">classid = #{classid},</if>
+            <if test="teacherid != null">teacherid = #{teacherid},</if>
+            <if test="studentcount != null">studentcount = #{studentcount},</if>
         </trim>
-        where PlanID = #{PlanID}
+        where planid = #{planid}
     </update>
 
-    <delete id="deleteTextbookTeachingplanByPlanID" parameterType="Long">
-        delete from textbook_teachingplan where PlanID = #{PlanID}
+    <delete id="deleteTextbookTeachingplanByPlanid" parameterType="Long">
+        delete from textbook_teachingplan where planid = #{planid}
     </delete>
 
-    <delete id="deleteTextbookTeachingplanByPlanIDs" parameterType="String">
-        delete from textbook_teachingplan where PlanID in 
-        <foreach item="PlanID" collection="array" open="(" separator="," close=")">
-            #{PlanID}
+    <delete id="deleteTextbookTeachingplanByPlanids" parameterType="String">
+        delete from textbook_teachingplan where planid in 
+        <foreach item="planid" collection="array" open="(" separator="," close=")">
+            #{planid}
         </foreach>
     </delete>
 </mapper>

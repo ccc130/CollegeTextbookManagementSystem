@@ -16,97 +16,97 @@ public class TextbookTeachingplan extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 计划id */
-    private Long PlanID;
+    private Long planid;
 
     /** 学期 */
     @Excel(name = "学期")
-    private String Semester;
-
-    /** 班级id */
-    @Excel(name = "班级id")
-    private Long ClassID;
+    private String semester;
 
     /** 课程id */
     @Excel(name = "课程id")
-    private Long CourseID;
+    private Long courseid;
+
+    /** 班级id */
+    @Excel(name = "班级id")
+    private Long classid;
 
     /** 教师id */
     @Excel(name = "教师id")
-    private Long TeacherID;
+    private Long teacherid;
 
     /** 学生数量 */
     @Excel(name = "学生数量")
-    private Long StudentCount;
+    private Long studentcount;
 
-    public void setPlanID(Long PlanID) 
+    public void setPlanid(Long planid) 
     {
-        this.PlanID = PlanID;
+        this.planid = planid;
     }
 
-    public Long getPlanID() 
+    public Long getPlanid() 
     {
-        return PlanID;
+        return planid;
     }
 
-    public void setSemester(String Semester) 
+    public void setSemester(String semester) 
     {
-        this.Semester = Semester;
+        this.semester = semester;
     }
 
     public String getSemester() 
     {
-        return Semester;
+        return semester;
     }
 
-    public void setClassID(Long ClassID) 
+    public void setCourseid(Long courseid) 
     {
-        this.ClassID = ClassID;
+        this.courseid = courseid;
     }
 
-    public Long getClassID() 
+    public Long getCourseid() 
     {
-        return ClassID;
+        return courseid;
     }
 
-    public void setCourseID(Long CourseID) 
+    public void setClassid(Long classid) 
     {
-        this.CourseID = CourseID;
+        this.classid = classid;
     }
 
-    public Long getCourseID() 
+    public Long getClassid() 
     {
-        return CourseID;
+        return classid;
     }
 
-    public void setTeacherID(Long TeacherID) 
+    public void setTeacherid(Long teacherid) 
     {
-        this.TeacherID = TeacherID;
+        this.teacherid = teacherid;
     }
 
-    public Long getTeacherID() 
+    public Long getTeacherid() 
     {
-        return TeacherID;
+        return teacherid;
     }
 
-    public void setStudentCount(Long StudentCount) 
+    public void setStudentcount(Long studentcount) 
     {
-        this.StudentCount = StudentCount;
+        this.studentcount = studentcount;
     }
 
-    public Long getStudentCount() 
+    public Long getStudentcount() 
     {
-        return StudentCount;
+        return studentcount;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("PlanID", getPlanID())
-            .append("Semester", getSemester())
-            .append("ClassID", getClassID())
-            .append("CourseID", getCourseID())
-            .append("TeacherID", getTeacherID())
-            .append("StudentCount", getStudentCount())
+            .append("planid", getPlanid())
+            .append("semester", getSemester())
+            .append("courseid", getCourseid())
+            .append("classid", getClassid())
+            .append("teacherid", getTeacherid())
+            .append("studentcount", getStudentcount())
             .toString();
     }
 }

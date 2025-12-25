@@ -63,10 +63,10 @@ public class TextbookCourseController extends BaseController
      * 获取课程管理详细信息
      */
     @PreAuthorize("@ss.hasPermi('textbook:course:query')")
-    @GetMapping(value = "/{CourseID}")
-    public AjaxResult getInfo(@PathVariable("CourseID") Long CourseID)
+    @GetMapping(value = "/{courseId}")
+    public AjaxResult getInfo(@PathVariable("courseId") Long courseId)
     {
-        return success(textbookCourseService.selectTextbookCourseByCourseID(CourseID));
+        return success(textbookCourseService.selectTextbookCourseByCourseId(courseId));
     }
 
     /**
@@ -96,9 +96,9 @@ public class TextbookCourseController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('textbook:course:remove')")
     @Log(title = "课程管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{CourseIDs}")
-    public AjaxResult remove(@PathVariable Long[] CourseIDs)
+	@DeleteMapping("/{courseIds}")
+    public AjaxResult remove(@PathVariable Long[] courseIds)
     {
-        return toAjax(textbookCourseService.deleteTextbookCourseByCourseIDs(CourseIDs));
+        return toAjax(textbookCourseService.deleteTextbookCourseByCourseIds(courseIds));
     }
 }

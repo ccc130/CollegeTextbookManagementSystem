@@ -14,10 +14,10 @@ public interface ITextbookCourseService
     /**
      * 查询课程管理
      * 
-     * @param CourseID 课程管理主键
+     * @param courseId 课程管理主键
      * @return 课程管理
      */
-    public TextbookCourse selectTextbookCourseByCourseID(Long CourseID);
+    public TextbookCourse selectTextbookCourseByCourseId(Long courseId);
 
     /**
      * 查询课程管理列表
@@ -46,16 +46,16 @@ public interface ITextbookCourseService
     /**
      * 批量删除课程管理
      * 
-     * @param CourseIDs 需要删除的课程管理主键集合
+     * @param courseIds 需要删除的课程管理主键集合
      * @return 结果
      */
-    public int deleteTextbookCourseByCourseIDs(Long[] CourseIDs);
+    public int deleteTextbookCourseByCourseIds(Long[] courseIds);
 
     /**
      * 删除课程管理信息
      * 
-     * @param CourseID 课程管理主键
+     * @param courseId 课程管理主键
      * @return 结果
      */
-    public int deleteTextbookCourseByCourseID(Long CourseID);
+    public int deleteTextbookCourseByCourseId(Long courseId);
 }

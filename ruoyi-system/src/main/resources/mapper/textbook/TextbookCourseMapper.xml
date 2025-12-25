@@ -5,70 +5,72 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.system.mapper.TextbookCourseMapper">
     
     <resultMap type="TextbookCourse" id="TextbookCourseResult">
-        <result property="CourseID"    column="CourseID"    />
-        <result property="CourseName"    column="CourseName"    />
-        <result property="CourseCode"    column="CourseCode"    />
-        <result property="Credits"    column="Credits"    />
-        <result property="Category"    column="Category"    />
-        <result property="Description"    column="Description"    />
+        <result property="courseId"    column="courseId"    />
+        <result property="coursename"    column="coursename"    />
+        <result property="coursecode"    column="coursecode"    />
+        <result property="credits"    column="credits"    />
+        <result property="category"    column="category"    />
+        <result property="description"    column="description"    />
     </resultMap>
 
     <sql id="selectTextbookCourseVo">
-        select CourseID, CourseName, CourseCode, Credits, Category, Description from textbook_course
+        select courseId, coursename, coursecode, credits, category, description from textbook_course
     </sql>
 
     <select id="selectTextbookCourseList" parameterType="TextbookCourse" resultMap="TextbookCourseResult">
         <include refid="selectTextbookCourseVo"/>
         <where>  
-            <if test="CourseName != null  and CourseName != ''"> and CourseName like concat('%', #{CourseName}, '%')</if>
-            <if test="CourseCode != null  and CourseCode != ''"> and CourseCode = #{CourseCode}</if>
-            <if test="Category != null  and Category != ''"> and Category = #{Category}</if>
+            <if test="coursename != null  and coursename != ''"> and coursename like concat('%', #{coursename}, '%')</if>
+            <if test="coursecode != null  and coursecode != ''"> and coursecode = #{coursecode}</if>
+            <if test="credits != null "> and credits = #{credits}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
         </where>
     </select>
     
-    <select id="selectTextbookCourseByCourseID" parameterType="Long" resultMap="TextbookCourseResult">
+    <select id="selectTextbookCourseByCourseId" parameterType="Long" resultMap="TextbookCourseResult">
         <include refid="selectTextbookCourseVo"/>
-        where CourseID = #{CourseID}
+        where courseId = #{courseId}
     </select>
 
-    <insert id="insertTextbookCourse" parameterType="TextbookCourse" useGeneratedKeys="true" keyProperty="CourseID">
+    <insert id="insertTextbookCourse" parameterType="TextbookCourse" useGeneratedKeys="true" keyProperty="courseId">
         insert into textbook_course
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="CourseName != null and CourseName != ''">CourseName,</if>
-            <if test="CourseCode != null and CourseCode != ''">CourseCode,</if>
-            <if test="Credits != null">Credits,</if>
-            <if test="Category != null">Category,</if>
-            <if test="Description != null">Description,</if>
+            <if test="coursename != null">coursename,</if>
+            <if test="coursecode != null">coursecode,</if>
+            <if test="credits != null">credits,</if>
+            <if test="category != null">category,</if>
+            <if test="description != null">description,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="CourseName != null and CourseName != ''">#{CourseName},</if>
-            <if test="CourseCode != null and CourseCode != ''">#{CourseCode},</if>
-            <if test="Credits != null">#{Credits},</if>
-            <if test="Category != null">#{Category},</if>
-            <if test="Description != null">#{Description},</if>
+            <if test="coursename != null">#{coursename},</if>
+            <if test="coursecode != null">#{coursecode},</if>
+            <if test="credits != null">#{credits},</if>
+            <if test="category != null">#{category},</if>
+            <if test="description != null">#{description},</if>
          </trim>
     </insert>
 
     <update id="updateTextbookCourse" parameterType="TextbookCourse">
         update textbook_course
         <trim prefix="SET" suffixOverrides=",">
-            <if test="CourseName != null and CourseName != ''">CourseName = #{CourseName},</if>
-            <if test="CourseCode != null and CourseCode != ''">CourseCode = #{CourseCode},</if>
-            <if test="Credits != null">Credits = #{Credits},</if>
-            <if test="Category != null">Category = #{Category},</if>
-            <if test="Description != null">Description = #{Description},</if>
+            <if test="coursename != null">coursename = #{coursename},</if>
+            <if test="coursecode != null">coursecode = #{coursecode},</if>
+            <if test="credits != null">credits = #{credits},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="description != null">description = #{description},</if>
         </trim>
-        where CourseID = #{CourseID}
+        where courseId = #{courseId}
     </update>
 
-    <delete id="deleteTextbookCourseByCourseID" parameterType="Long">
-        delete from textbook_course where CourseID = #{CourseID}
+    <delete id="deleteTextbookCourseByCourseId" parameterType="Long">
+        delete from textbook_course where courseId = #{courseId}
     </delete>
 
-    <delete id="deleteTextbookCourseByCourseIDs" parameterType="String">
-        delete from textbook_course where CourseID in 
-        <foreach item="CourseID" collection="array" open="(" separator="," close=")">
-            #{CourseID}
+    <delete id="deleteTextbookCourseByCourseIds" parameterType="String">
+        delete from textbook_course where courseId in 
+        <foreach item="courseId" collection="array" open="(" separator="," close=")">
+            #{courseId}
         </foreach>
     </delete>
 </mapper>

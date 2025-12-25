@@ -63,10 +63,10 @@ public class TextbookTeachingplanController extends BaseController
      * 获取教学计划详细信息
      */
     @PreAuthorize("@ss.hasPermi('textbook:teachingplan:query')")
-    @GetMapping(value = "/{PlanID}")
-    public AjaxResult getInfo(@PathVariable("PlanID") Long PlanID)
+    @GetMapping(value = "/{planid}")
+    public AjaxResult getInfo(@PathVariable("planid") Long planid)
     {
-        return success(textbookTeachingplanService.selectTextbookTeachingplanByPlanID(PlanID));
+        return success(textbookTeachingplanService.selectTextbookTeachingplanByPlanid(planid));
     }
 
     /**
@@ -96,9 +96,9 @@ public class TextbookTeachingplanController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('textbook:teachingplan:remove')")
     @Log(title = "教学计划", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{PlanIDs}")
-    public AjaxResult remove(@PathVariable Long[] PlanIDs)
+	@DeleteMapping("/{planids}")
+    public AjaxResult remove(@PathVariable Long[] planids)
     {
-        return toAjax(textbookTeachingplanService.deleteTextbookTeachingplanByPlanIDs(PlanIDs));
+        return toAjax(textbookTeachingplanService.deleteTextbookTeachingplanByPlanids(planids));
     }
 }

@@ -10,9 +10,9 @@ export function listTeachingplan(query) {
 }
 
 // 查询教学计划详细
-export function getTeachingplan(PlanID) {
+export function getTeachingplan(planid) {
   return request({
-    url: '/textbook/teachingplan/' + PlanID,
+    url: '/textbook/teachingplan/' + planid,
     method: 'get'
   })
 }
@@ -36,9 +36,9 @@ export function updateTeachingplan(data) {
 }
 
 // 删除教学计划
-export function delTeachingplan(PlanID) {
+export function delTeachingplan(planid) {
   return request({
-    url: '/textbook/teachingplan/' + PlanID,
+    url: '/textbook/teachingplan/' + planid,
     method: 'delete'
   })
 }

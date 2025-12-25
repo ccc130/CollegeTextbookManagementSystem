@@ -22,13 +22,13 @@ public class TextbookCourseServiceImpl implements ITextbookCourseService
     /**
      * 查询课程管理
      * 
-     * @param CourseID 课程管理主键
+     * @param courseId 课程管理主键
      * @return 课程管理
      */
     @Override
-    public TextbookCourse selectTextbookCourseByCourseID(Long CourseID)
+    public TextbookCourse selectTextbookCourseByCourseId(Long courseId)
     {
-        return textbookCourseMapper.selectTextbookCourseByCourseID(CourseID);
+        return textbookCourseMapper.selectTextbookCourseByCourseId(courseId);
     }
 
     /**
@@ -70,24 +70,24 @@ public class TextbookCourseServiceImpl implements ITextbookCourseService
     /**
      * 批量删除课程管理
      * 
-     * @param CourseIDs 需要删除的课程管理主键
+     * @param courseIds 需要删除的课程管理主键
      * @return 结果
      */
     @Override
-    public int deleteTextbookCourseByCourseIDs(Long[] CourseIDs)
+    public int deleteTextbookCourseByCourseIds(Long[] courseIds)
     {
-        return textbookCourseMapper.deleteTextbookCourseByCourseIDs(CourseIDs);
+        return textbookCourseMapper.deleteTextbookCourseByCourseIds(courseIds);
     }
 
     /**
      * 删除课程管理信息
      * 
-     * @param CourseID 课程管理主键
+     * @param courseId 课程管理主键
      * @return 结果
      */
     @Override
-    public int deleteTextbookCourseByCourseID(Long CourseID)
+    public int deleteTextbookCourseByCourseId(Long courseId)
     {
-        return textbookCourseMapper.deleteTextbookCourseByCourseID(CourseID);
+        return textbookCourseMapper.deleteTextbookCourseByCourseId(courseId);
     }
 }
