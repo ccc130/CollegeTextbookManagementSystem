@@ -131,7 +131,7 @@
 
     <!-- 添加或修改出入库日志对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="logsRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="logsRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="教材名称" prop="textbookId">
           <el-select v-model="form.textbookId" placeholder="请选择教材" clearable filterable>
             <el-option

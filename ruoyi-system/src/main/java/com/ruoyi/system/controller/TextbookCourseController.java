@@ -1,0 +1,104 @@
+package com.ruoyi.system.controller;
+
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.TextbookCourse;
+import com.ruoyi.system.service.ITextbookCourseService;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.core.page.TableDataInfo;
+
+/**
+ * 课程管理Controller
+ * 
+ * @author ccc
+ * @date 2025-12-25
+ */
+@RestController
+@RequestMapping("/textbook/course")
+public class TextbookCourseController extends BaseController
+{
+    @Autowired
+    private ITextbookCourseService textbookCourseService;
+
+    /**
+     * 查询课程管理列表
+     */
+    @PreAuthorize("@ss.hasPermi('textbook:course:list')")
+    @GetMapping("/list")
+    public TableDataInfo list(TextbookCourse textbookCourse)
+    {
+        startPage();
+        List<TextbookCourse> list = textbookCourseService.selectTextbookCourseList(textbookCourse);
+        return getDataTable(list);
+    }
+
+    /**
+     * 导出课程管理列表
+     */
+    @PreAuthorize("@ss.hasPermi('textbook:course:export')")
+    @Log(title = "课程管理", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, TextbookCourse textbookCourse)
+    {
+        List<TextbookCourse> list = textbookCourseService.selectTextbookCourseList(textbookCourse);
+        ExcelUtil<TextbookCourse> util = new ExcelUtil<TextbookCourse>(TextbookCourse.class);
+        util.exportExcel(response, list, "课程管理数据");
+    }
+
+    /**
+     * 获取课程管理详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('textbook:course:query')")
+    @GetMapping(value = "/{CourseID}")
+    public AjaxResult getInfo(@PathVariable("CourseID") Long CourseID)
+    {
+        return success(textbookCourseService.selectTextbookCourseByCourseID(CourseID));
+    }
+
+    /**
+     * 新增课程管理
+     */
+    @PreAuthorize("@ss.hasPermi('textbook:course:add')")
+    @Log(title = "课程管理", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody TextbookCourse textbookCourse)
+    {
+        return toAjax(textbookCourseService.insertTextbookCourse(textbookCourse));
+    }
+
+    /**
+     * 修改课程管理
+     */
+    @PreAuthorize("@ss.hasPermi('textbook:course:edit')")
+    @Log(title = "课程管理", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@RequestBody TextbookCourse textbookCourse)
+    {
+        return toAjax(textbookCourseService.updateTextbookCourse(textbookCourse));
+    }
+
+    /**
+     * 删除课程管理
+     */
+    @PreAuthorize("@ss.hasPermi('textbook:course:remove')")
+    @Log(title = "课程管理", businessType = BusinessType.DELETE)
+	@DeleteMapping("/{CourseIDs}")
+    public AjaxResult remove(@PathVariable Long[] CourseIDs)
+    {
+        return toAjax(textbookCourseService.deleteTextbookCourseByCourseIDs(CourseIDs));
+    }
+}

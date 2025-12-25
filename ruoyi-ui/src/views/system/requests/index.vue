@@ -31,13 +31,20 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="课程名称" prop="courseName">
-        <el-input
-          v-model="queryParams.courseName"
-          placeholder="请输入课程名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
+      <el-form-item label="课程名称" prop="courseId">
+        <el-select 
+          v-model="queryParams.courseId" 
+          placeholder="请选择课程" 
+          clearable 
+          filterable
+        >
+          <el-option
+            v-for="item in courseOptions"
+            :key="item.courseId"
+            :label="item.courseName"
+            :value="item.courseId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="授课班级" prop="classId">
         <el-tree-select
@@ -178,8 +185,21 @@
           {{ getTextbookNameById(scope.row.textbookId) }}
         </template>
       </el-table-column>
-      <el-table-column label="课程名称" align="center" prop="courseName" />
-      <el-table-column label="授课班级" align="center" prop="classId" />
+      <el-table-column label="课程名称" align="center" prop="courseId">
+        <template #default="scope">
+          {{ getCourseNameById(scope.row.courseId) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="授课班级" align="center" prop="classId">
+        <template #default="scope">
+          {{ getClassNameById(scope.row.classId) }}
+        </template>
+      </el-table-column>
+      <el-table-column label="教学计划" align="center" prop="teachingPlanId">
+        <template #default="scope">
+          {{ getTeachingPlanNameById(scope.row.teachingPlanId) }}
+        </template>
+      </el-table-column>
       <el-table-column label="申请数量" align="center" prop="quantity" />
       <el-table-column label="状态" align="center" prop="status">
         <template #default="scope">
@@ -226,7 +246,7 @@
 
     <!-- 添加或修改征订申请对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-      <el-form ref="requestsRef" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="requestsRef" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="申请人" prop="teacherId">
           <el-select 
             v-model="form.teacherId" 
@@ -260,8 +280,37 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="课程名称" prop="courseName">
-          <el-input v-model="form.courseName" placeholder="请输入课程名称" :disabled="isReviewMode" />
+        <el-form-item label="课程名称" prop="courseId">
+          <el-select 
+            v-model="form.courseId" 
+            placeholder="请选择课程" 
+            clearable 
+            filterable
+            :disabled="isReviewMode"
+          >
+            <el-option
+              v-for="item in courseOptions"
+              :key="item.courseId"
+              :label="item.courseName"
+              :value="item.courseId"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="教学计划" prop="teachingPlanId">
+          <el-select 
+            v-model="form.teachingPlanId" 
+            placeholder="请选择教学计划" 
+            clearable 
+            filterable
+            :disabled="isReviewMode"
+          >
+            <el-option
+              v-for="item in teachingPlanOptions"
+              :key="item.planId"
+              :label="`${item.semester} - ${getClassNameById(item.classId)} - ${getCourseNameById(item.courseId)}`"
+              :value="item.planId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="授课班级" prop="classId">
           <el-tree-select
@@ -363,7 +412,7 @@
   </div>
 </template>
 
-<script setup name="Requests">
+<script setup name="RequestsList">
 import { listRequests, getRequests, delRequests, addRequests, updateRequests } from "@/api/system/requests"
 
 import useUserStore from '@/store/modules/user'
@@ -372,6 +421,8 @@ import { listDept } from "@/api/system/dept"
 import { deptTreeSelect, listUser } from "@/api/system/user"
 import { updateInventory, getInventory, addInventory, listInventory } from "@/api/system/inventory"
 import { addLogs } from "@/api/system/logs"
+import { listCourse } from "@/api/textbook/course"
+import { listTeachingplan } from "@/api/textbook/teachingplan"  // 添加教学计划API
 import request from '@/utils/request'
 
 const { proxy } = getCurrentInstance()
@@ -404,6 +455,8 @@ const textbookOptions = ref([])
 const classOptions = ref([])
 const collegeOptions = ref([])
 const userOptions = ref([])
+const courseOptions = ref([])
+const teachingPlanOptions = ref([])  // 添加教学计划选项
 // 添加库存映射和当前选中教材的库存信息
 const inventoryMap = ref({})
 const selectedTextbookInventory = ref(null)
@@ -415,7 +468,7 @@ const data = reactive({
     pageSize: 10,
     teacherId: hasReviewPermission.value ? null : userStore.id, // 无审核权限时，默认只显示当前用户申请的记录
     textbookId: null,
-    courseName: null,
+    courseId: null,
     classId: null,
     status: null,
     collegeId: null,
@@ -430,8 +483,14 @@ const data = reactive({
     textbookId: [
       { required: true, message: "申请教材不能为空", trigger: "blur" }
     ],
-    courseName: [
+    courseId: [
       { required: true, message: "课程名称不能为空", trigger: "blur" }
+    ],
+    teachingPlanId: [
+      { required: true, message: "教学计划不能为空", trigger: "change" }
+    ],
+    classId: [
+      { required: true, message: "授课班级不能为空", trigger: "change" }
     ],
     quantity: [
       { required: true, message: "申请数量不能为空", trigger: "blur" },
@@ -485,6 +544,25 @@ function getList() {
 function getTextbookList() {
   listBooks({ pageSize: 1000 }).then(response => {
     textbookOptions.value = response.rows
+  })
+}
+
+/** 查询课程列表 */
+function getCourseList() {
+  listCourse({ pageSize: 1000 }).then(response => {
+    courseOptions.value = response.rows.map(course => ({
+      courseId: course.CourseID,
+      courseName: course.CourseName
+    }))
+  })
+}
+
+/** 查询教学计划列表 */
+function getTeachingPlanList() {
+  import("@/api/textbook/teachingplan").then(({ listTeachingplan }) => {
+    listTeachingplan({ pageSize: 1000 }).then(response => {
+      teachingPlanOptions.value = response.rows
+    })
   })
 }
 
@@ -578,12 +656,52 @@ function cancel() {
   reset()
 }
 
+// 根据ID获取教学计划名称
+function getTeachingPlanNameById(teachingPlanId) {
+  if (!teachingPlanId) return '';
+  
+  const plan = teachingPlanOptions.value.find(item => item.planId == teachingPlanId);
+  if (plan) {
+    return `${plan.semester} - ${getClassNameById(plan.classId)} - ${getCourseNameById(plan.courseId)}`;
+  }
+  return teachingPlanId;
+}
+
 // 根据ID获取学院名称
 function getCollegeNameById(collegeId) {
   if (!collegeId) return '';
   
   const college = collegeOptions.value.find(item => item.deptId == collegeId);
   return college ? college.deptName : collegeId;
+}
+
+// 根据ID获取课程名称
+function getCourseNameById(courseId) {
+  if (!courseId) return '';
+  
+  const course = courseOptions.value.find(item => item.courseId == courseId);
+  return course ? course.courseName : courseId;
+}
+
+// 根据ID获取班级名称
+function getClassNameById(classId) {
+  if (!classId) return '';
+  
+  // 递归查找部门名称
+  function findDeptName(depts, id) {
+    for (const dept of depts) {
+      if (dept.deptId == id || dept.id == id) {
+        return dept.deptName || dept.label;
+      }
+      if (dept.children) {
+        const found = findDeptName(dept.children, id);
+        if (found) return found;
+      }
+    }
+    return id;
+  }
+  
+  return findDeptName(classOptions.value, classId);
 }
 
 // 根据ID获取教材名称
@@ -611,8 +729,9 @@ function reset() {
     requestId: null,
     teacherId: userStore.id,  // 自动填入当前用户ID
     textbookId: null,
-    courseName: null,
+    courseId: null,
     classId: null,
+    teachingPlanId: null,
     quantity: null,
     status: "0",
     collegeId: null,
@@ -626,7 +745,60 @@ function reset() {
   proxy.resetForm("requestsRef")
 }
 
-// 审核通过后更新库存
+/** 提交按钮 */
+function submitForm() {
+  proxy.$refs["requestsRef"].validate(valid => {
+    if (valid) {
+        // 如果是审核模式，确保审核信息正确
+        if (isReviewMode.value) {
+          form.value.reviewedBy = userStore.id;
+          if (!form.value.reviewedAt) {
+            const now = new Date();
+            form.value.reviewedAt = now.toISOString().slice(0, 10);
+          }
+        }
+      
+      if (form.value.requestId != null) {
+        // 如果是审核模式，确保审核信息正确
+        if (isReviewMode.value) {
+          form.value.reviewedBy = userStore.id;
+          if (!form.value.reviewedAt) {
+            const now = new Date();
+            form.value.reviewedAt = now.toISOString().slice(0, 10);
+          }
+        }
+        updateRequests(form.value).then(response => {
+          proxy.$modal.msgSuccess("修改成功")
+          // 如果审核通过(状态为1)，则更新库存并添加日志记录
+          if (form.value.status === '1' || form.value.status === 1) {
+            updateInventoryOnApproval(form.value)
+          }
+          open.value = false
+          getList()
+        })
+      } else {
+        // 对于新增申请，验证申请数量不超过库存
+        if (form.value.textbookId && selectedTextbookInventory.value !== null) {
+          const quantity = parseInt(form.value.quantity)
+          if (quantity > selectedTextbookInventory.value) {
+            proxy.$modal.msgError(`申请数量不能超过当前可用库存 ${selectedTextbookInventory.value}`)
+            return
+          }
+        }
+        
+        addRequests(form.value).then(response => {
+          proxy.$modal.msgSuccess("新增成功")
+          open.value = false
+          getList()
+        })
+      }
+    } else {
+      proxy.$modal.msgError("请检查输入信息是否正确")
+    }
+  })
+}
+
+/** 审核通过后更新库存 */
 function updateInventoryOnApproval(requestData) {
   // 查找对应的库存记录
   getInventoryByTextbookId(requestData.textbookId).then(inventoryResponse => {
@@ -658,6 +830,7 @@ function updateInventoryOnApproval(requestData) {
         addLogRecord(requestData, parseInt(requestData.quantity));
       }).catch(error => {
         console.error('库存更新失败:', error);
+        proxy.$modal.msgError("库存更新失败");
       });
     } else {
       // 如果没有找到库存记录，提示用户先创建库存记录
@@ -793,59 +966,6 @@ function handleReview(row) {
   })
 }
 
-/** 提交按钮 */
-function submitForm() {
-  proxy.$refs["requestsRef"].validate(valid => {
-    if (valid) {
-        // 如果是审核模式，确保审核信息正确
-        if (isReviewMode.value) {
-          form.value.reviewedBy = userStore.id;
-          if (!form.value.reviewedAt) {
-            const now = new Date();
-            form.value.reviewedAt = now.toISOString().slice(0, 10);
-          }
-        }
-      
-      if (form.value.requestId != null) {
-        // 如果是审核模式，确保审核信息正确
-        if (isReviewMode.value) {
-          form.value.reviewedBy = userStore.id;
-          if (!form.value.reviewedAt) {
-            const now = new Date();
-            form.value.reviewedAt = now.toISOString().slice(0, 10);
-          }
-        }
-        updateRequests(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
-          // 如果审核通过(状态为1)，则更新库存并添加日志记录
-          if (form.value.status === '1' || form.value.status === 1) {
-            updateInventoryOnApproval(form.value)
-          }
-          open.value = false
-          getList()
-        })
-      } else {
-        // 对于新增申请，验证申请数量不超过库存
-        if (form.value.textbookId && selectedTextbookInventory.value !== null) {
-          const quantity = parseInt(form.value.quantity)
-          if (quantity > selectedTextbookInventory.value) {
-            proxy.$modal.msgError(`申请数量不能超过当前可用库存 ${selectedTextbookInventory.value}`)
-            return
-          }
-        }
-        
-        addRequests(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
-          open.value = false
-          getList()
-        })
-      }
-    } else {
-      proxy.$modal.msgError("请检查输入信息是否正确")
-    }
-  })
-}
-
 /** 删除按钮操作 */
 function handleDelete(row) {
   const _requestIds = row.requestId || ids.value
@@ -872,10 +992,12 @@ onMounted(() => {
   }
   getList()
   getTextbookList()
+  getCourseList()
   getClassList()
   getCollegeList()
   getUserList()
   getInventoryList() // 获取库存信息
+  getTeachingPlanList() // 获取教学计划信息
   console.log('Component initialized.');
 })
 </script>

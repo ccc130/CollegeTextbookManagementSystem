@@ -11,7 +11,7 @@
  Target Server Version : 80200
  File Encoding         : 65001
 
- Date: 24/12/2025 18:09:18
+ Date: 25/12/2025 20:43:41
 */
 
 SET NAMES utf8mb4;
@@ -33,7 +33,7 @@ CREATE TABLE `sys_config`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`config_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 100 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '参数配置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '参数配置表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_config
@@ -100,7 +100,7 @@ CREATE TABLE `sys_dict_data`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 107 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 106 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '字典数据表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_dict_data
@@ -237,7 +237,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 133 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 181 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_logininfor
@@ -322,6 +322,11 @@ INSERT INTO `sys_logininfor` VALUES (176, 'admin', '127.0.0.1', '内网IP', 'Chr
 INSERT INTO `sys_logininfor` VALUES (177, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 18:07:53');
 INSERT INTO `sys_logininfor` VALUES (178, '13', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 18:07:58');
 INSERT INTO `sys_logininfor` VALUES (179, '13', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '退出成功', '2025-12-24 18:08:20');
+INSERT INTO `sys_logininfor` VALUES (180, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '1', '验证码已失效', '2025-12-24 18:11:44');
+INSERT INTO `sys_logininfor` VALUES (181, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-24 18:11:50');
+INSERT INTO `sys_logininfor` VALUES (182, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-25 18:05:06');
+INSERT INTO `sys_logininfor` VALUES (183, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-25 18:49:26');
+INSERT INTO `sys_logininfor` VALUES (184, 'admin', '127.0.0.1', '内网IP', 'Chrome 14', 'Windows 10', '0', '登录成功', '2025-12-25 20:21:47');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -349,7 +354,7 @@ CREATE TABLE `sys_menu`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2040 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2044 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -445,6 +450,18 @@ INSERT INTO `sys_menu` VALUES (2041, '教师新增', 2039, 1, 'system:teacher:ad
 INSERT INTO `sys_menu` VALUES (2042, '教师修改', 2039, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'system:teacher:edit', '#', 'admin', '2025-12-24 10:57:41', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2043, '教师删除', 2039, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'system:teacher:delete', '#', 'admin', '2025-12-24 10:58:02', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2044, '教师导出', 2039, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'system:teacher:export', '#', 'admin', '2025-12-24 10:58:25', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2045, '课程管理', 1, 1, 'course', 'textbook/course/index', NULL, '', 1, 0, 'C', '0', '0', 'textbook:course:list', 'chart', 'admin', '2025-12-25 15:33:34', 'admin', '2025-12-25 20:42:28', '课程管理菜单');
+INSERT INTO `sys_menu` VALUES (2046, '课程管理查询', 2045, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:course:query', '#', 'admin', '2025-12-25 15:33:34', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2047, '课程管理新增', 2045, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:course:add', '#', 'admin', '2025-12-25 15:33:34', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2048, '课程管理修改', 2045, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:course:edit', '#', 'admin', '2025-12-25 15:33:34', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2049, '课程管理删除', 2045, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:course:remove', '#', 'admin', '2025-12-25 15:33:34', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2050, '课程管理导出', 2045, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:course:export', '#', 'admin', '2025-12-25 15:33:34', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2057, '教学计划', 1, 1, 'teachingplan', 'textbook/teachingplan/index', NULL, '', 1, 0, 'C', '0', '0', 'textbook:teachingplan:list', 'date', 'admin', '2025-12-25 15:34:45', 'admin', '2025-12-25 20:42:47', '教学计划菜单');
+INSERT INTO `sys_menu` VALUES (2058, '教学计划查询', 2057, 1, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:teachingplan:query', '#', 'admin', '2025-12-25 15:34:45', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2059, '教学计划新增', 2057, 2, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:teachingplan:add', '#', 'admin', '2025-12-25 15:34:45', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2060, '教学计划修改', 2057, 3, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:teachingplan:edit', '#', 'admin', '2025-12-25 15:34:45', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2061, '教学计划删除', 2057, 4, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:teachingplan:remove', '#', 'admin', '2025-12-25 15:34:45', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2062, '教学计划导出', 2057, 5, '#', '', NULL, '', 1, 0, 'F', '0', '0', 'textbook:teachingplan:export', '#', 'admin', '2025-12-25 15:34:45', '', NULL, '');
 
 -- ----------------------------
 -- Table structure for sys_notice
@@ -490,7 +507,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 205 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 244 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_oper_log
@@ -640,6 +657,13 @@ INSERT INTO `sys_oper_log` VALUES (241, '角色管理', 2, 'com.ruoyi.web.contro
 INSERT INTO `sys_oper_log` VALUES (242, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":false,\"deptIds\":[101,103],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:06:07', 9);
 INSERT INTO `sys_oper_log` VALUES (243, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":true,\"deptIds\":[100,101,103],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:06:24', 10);
 INSERT INTO `sys_oper_log` VALUES (244, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"admin\":false,\"createTime\":\"2025-12-23 08:38:42\",\"dataScope\":\"2\",\"delFlag\":\"0\",\"deptCheckStrictly\":false,\"deptIds\":[101,200,103,104,105,106],\"flag\":false,\"menuCheckStrictly\":false,\"params\":{},\"roleId\":101,\"roleKey\":\"teacher\",\"roleName\":\"任课老师\",\"roleSort\":4,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-24 18:06:41', 9);
+INSERT INTO `sys_oper_log` VALUES (245, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', '计算机科学与技术学院', '/system/menu/2045', '127.0.0.1', '内网IP', '2045', '{\"msg\":\"存在子菜单,不允许删除\",\"code\":601}', 0, NULL, '2025-12-25 19:01:38', 8);
+INSERT INTO `sys_oper_log` VALUES (246, '教材库存', 5, 'com.ruoyi.system.controller.TextbookInventoryController.export()', 'POST', 1, 'admin', '计算机科学与技术学院', '/system/inventory/export', '127.0.0.1', '内网IP', '{\"pageSize\":\"10\",\"pageNum\":\"1\"}', NULL, 0, NULL, '2025-12-25 19:28:47', 610);
+INSERT INTO `sys_oper_log` VALUES (247, '教材库存', 3, 'com.ruoyi.system.controller.TextbookInventoryController.remove()', 'DELETE', 1, 'admin', '计算机科学与技术学院', '/system/inventory/3', '127.0.0.1', '内网IP', '[3]', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-25 20:22:07', 23);
+INSERT INTO `sys_oper_log` VALUES (248, '教材库存', 1, 'com.ruoyi.system.controller.TextbookInventoryController.add()', 'POST', 1, 'admin', '计算机科学与技术学院', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":22,\"params\":{},\"textbookId\":2,\"totalQuantity\":123}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-25 20:22:19', 34);
+INSERT INTO `sys_oper_log` VALUES (249, '教材库存', 2, 'com.ruoyi.system.controller.TextbookInventoryController.edit()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/inventory', '127.0.0.1', '内网IP', '{\"availableQuantity\":4,\"inventoryId\":4,\"params\":{},\"textbookId\":2,\"totalQuantity\":6}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-25 20:22:36', 6);
+INSERT INTO `sys_oper_log` VALUES (250, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"textbook/course/index\",\"createTime\":\"2025-12-25 15:33:34\",\"icon\":\"chart\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2045,\"menuName\":\"课程管理\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":1,\"path\":\"course\",\"perms\":\"textbook:course:list\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-25 20:42:28', 23);
+INSERT INTO `sys_oper_log` VALUES (251, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', '计算机科学与技术学院', '/system/menu', '127.0.0.1', '内网IP', '{\"children\":[],\"component\":\"textbook/teachingplan/index\",\"createTime\":\"2025-12-25 15:34:45\",\"icon\":\"date\",\"isCache\":\"0\",\"isFrame\":\"1\",\"menuId\":2057,\"menuName\":\"教学计划\",\"menuType\":\"C\",\"orderNum\":1,\"params\":{},\"parentId\":1,\"path\":\"teachingplan\",\"perms\":\"textbook:teachingplan:list\",\"routeName\":\"\",\"status\":\"0\",\"updateBy\":\"admin\",\"visible\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2025-12-25 20:42:47', 7);
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -657,7 +681,7 @@ CREATE TABLE `sys_post`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`post_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '岗位信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '岗位信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_post
@@ -685,7 +709,7 @@ CREATE TABLE `sys_role`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -862,12 +886,12 @@ CREATE TABLE `sys_user`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 101, 'admin', 'ccc', '00', 'ry@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-24 18:05:19', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', '2025-12-24 18:05:18', '管理员');
+INSERT INTO `sys_user` VALUES (1, 101, 'admin', 'ccc', '00', 'ry@163.com', '15888888888', '0', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-25 20:21:47', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', '2025-12-25 20:21:47', '管理员');
 INSERT INTO `sys_user` VALUES (2, 105, 'ry', 'ccc', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2025-12-22 08:17:49', '2025-12-22 08:17:49', 'admin', '2025-12-22 08:17:49', '', NULL, '测试员');
 INSERT INTO `sys_user` VALUES (100, 100, '11', '11', '00', '', '', '0', '', '$2a$10$E4Ll4pSKVot0E1CwuCSDj.dYbTzCbTgzHS5UgxuVwyS7bHhmEahSe', '0', '0', '127.0.0.1', '2025-12-24 10:29:37', NULL, 'admin', '2025-12-23 09:18:10', '', '2025-12-24 10:29:36', NULL);
 INSERT INTO `sys_user` VALUES (101, 101, '12', '12', '00', '', '', '0', '', '$2a$10$Lk98Xyv2BhsozQXp6.lDA.SkHfBRKeduJl5ZbmYbCJuVT2Rab.20e', '0', '0', '127.0.0.1', '2025-12-24 10:36:35', NULL, 'admin', '2025-12-23 09:18:21', '', '2025-12-24 10:36:35', NULL);
@@ -925,7 +949,7 @@ CREATE TABLE `textbook_books`  (
   `created_by` int(0) DEFAULT NULL COMMENT '添加人',
   `created_at` datetime(0) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`textbook_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of textbook_books
@@ -940,7 +964,7 @@ CREATE TABLE `textbook_categories`  (
   `category_id` int(0) NOT NULL AUTO_INCREMENT COMMENT '类型ID',
   `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '类型名称',
   PRIMARY KEY (`category_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of textbook_categories
@@ -948,6 +972,22 @@ CREATE TABLE `textbook_categories`  (
 INSERT INTO `textbook_categories` VALUES (1, '100');
 INSERT INTO `textbook_categories` VALUES (2, '200');
 INSERT INTO `textbook_categories` VALUES (3, '300');
+
+-- ----------------------------
+-- Table structure for textbook_course
+-- ----------------------------
+DROP TABLE IF EXISTS `textbook_course`;
+CREATE TABLE `textbook_course`  (
+  `CourseID` int(0) NOT NULL AUTO_INCREMENT,
+  `CourseName` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `CourseCode` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Credits` int(0) DEFAULT NULL,
+  `College` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Category` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `Description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  PRIMARY KEY (`CourseID`) USING BTREE,
+  UNIQUE INDEX `CourseCode`(`CourseCode`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for textbook_inventory
@@ -959,13 +999,13 @@ CREATE TABLE `textbook_inventory`  (
   `total_quantity` int(0) DEFAULT NULL COMMENT '总数量',
   `available_quantity` int(0) DEFAULT NULL COMMENT '可领用数量',
   PRIMARY KEY (`inventory_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of textbook_inventory
 -- ----------------------------
-INSERT INTO `textbook_inventory` VALUES (3, 2, 7, 3);
-INSERT INTO `textbook_inventory` VALUES (4, 2, 3, 1);
+INSERT INTO `textbook_inventory` VALUES (4, 2, 6, 4);
+INSERT INTO `textbook_inventory` VALUES (5, 2, 123, 22);
 
 -- ----------------------------
 -- Table structure for textbook_order_requests
@@ -985,7 +1025,7 @@ CREATE TABLE `textbook_order_requests`  (
   `reviewed_at` datetime(0) DEFAULT NULL COMMENT '审核时间',
   `remarks` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '审核意见',
   PRIMARY KEY (`request_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of textbook_order_requests
@@ -1037,5 +1077,19 @@ INSERT INTO `textbook_stock_logs` VALUES (1, 2, 0, 1, 1, 1, '征订申请审核�
 INSERT INTO `textbook_stock_logs` VALUES (2, 2, 0, 2, 1, 3, '征订申请审核通过，申请ID: 3', '2025-12-23 00:00:00');
 INSERT INTO `textbook_stock_logs` VALUES (3, 2, 0, 2, 1, 2, '征订申请审核通过，申请ID: 2', '2025-12-23 00:00:00');
 INSERT INTO `textbook_stock_logs` VALUES (4, 2, 0, 1, 1, 4, '征订申请审核通过，申请ID: 4', '2025-12-24 00:00:00');
+
+-- ----------------------------
+-- Table structure for textbook_teachingplan
+-- ----------------------------
+DROP TABLE IF EXISTS `textbook_teachingplan`;
+CREATE TABLE `textbook_teachingplan`  (
+  `PlanID` int(0) NOT NULL AUTO_INCREMENT,
+  `Semester` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ClassID` int(0) NOT NULL,
+  `CourseID` int(0) NOT NULL,
+  `TeacherID` int(0) NOT NULL,
+  `StudentCount` int(0) NOT NULL,
+  PRIMARY KEY (`PlanID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

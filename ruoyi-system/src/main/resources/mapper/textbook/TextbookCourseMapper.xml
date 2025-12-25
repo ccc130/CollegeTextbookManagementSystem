@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TextbookCourseMapper">
+    
+    <resultMap type="TextbookCourse" id="TextbookCourseResult">
+        <result property="CourseID"    column="CourseID"    />
+        <result property="CourseName"    column="CourseName"    />
+        <result property="CourseCode"    column="CourseCode"    />
+        <result property="Credits"    column="Credits"    />
+        <result property="Category"    column="Category"    />
+        <result property="Description"    column="Description"    />
+    </resultMap>
+
+    <sql id="selectTextbookCourseVo">
+        select CourseID, CourseName, CourseCode, Credits, Category, Description from textbook_course
+    </sql>
+
+    <select id="selectTextbookCourseList" parameterType="TextbookCourse" resultMap="TextbookCourseResult">
+        <include refid="selectTextbookCourseVo"/>
+        <where>  
+            <if test="CourseName != null  and CourseName != ''"> and CourseName like concat('%', #{CourseName}, '%')</if>
+            <if test="CourseCode != null  and CourseCode != ''"> and CourseCode = #{CourseCode}</if>
+            <if test="Category != null  and Category != ''"> and Category = #{Category}</if>
+        </where>
+    </select>
+    
+    <select id="selectTextbookCourseByCourseID" parameterType="Long" resultMap="TextbookCourseResult">
+        <include refid="selectTextbookCourseVo"/>
+        where CourseID = #{CourseID}
+    </select>
+
+    <insert id="insertTextbookCourse" parameterType="TextbookCourse" useGeneratedKeys="true" keyProperty="CourseID">
+        insert into textbook_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="CourseName != null and CourseName != ''">CourseName,</if>
+            <if test="CourseCode != null and CourseCode != ''">CourseCode,</if>
+            <if test="Credits != null">Credits,</if>
+            <if test="Category != null">Category,</if>
+            <if test="Description != null">Description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="CourseName != null and CourseName != ''">#{CourseName},</if>
+            <if test="CourseCode != null and CourseCode != ''">#{CourseCode},</if>
+            <if test="Credits != null">#{Credits},</if>
+            <if test="Category != null">#{Category},</if>
+            <if test="Description != null">#{Description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTextbookCourse" parameterType="TextbookCourse">
+        update textbook_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="CourseName != null and CourseName != ''">CourseName = #{CourseName},</if>
+            <if test="CourseCode != null and CourseCode != ''">CourseCode = #{CourseCode},</if>
+            <if test="Credits != null">Credits = #{Credits},</if>
+            <if test="Category != null">Category = #{Category},</if>
+            <if test="Description != null">Description = #{Description},</if>
+        </trim>
+        where CourseID = #{CourseID}
+    </update>
+
+    <delete id="deleteTextbookCourseByCourseID" parameterType="Long">
+        delete from textbook_course where CourseID = #{CourseID}
+    </delete>
+
+    <delete id="deleteTextbookCourseByCourseIDs" parameterType="String">
+        delete from textbook_course where CourseID in 
+        <foreach item="CourseID" collection="array" open="(" separator="," close=")">
+            #{CourseID}
+        </foreach>
+    </delete>
+</mapper>

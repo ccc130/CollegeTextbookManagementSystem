@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TextbookTeachingplanMapper">
+    
+    <resultMap type="TextbookTeachingplan" id="TextbookTeachingplanResult">
+        <result property="PlanID"    column="PlanID"    />
+        <result property="Semester"    column="Semester"    />
+        <result property="ClassID"    column="ClassID"    />
+        <result property="CourseID"    column="CourseID"    />
+        <result property="TeacherID"    column="TeacherID"    />
+        <result property="StudentCount"    column="StudentCount"    />
+    </resultMap>
+
+    <sql id="selectTextbookTeachingplanVo">
+        select PlanID, Semester, ClassID, CourseID, TeacherID, StudentCount from textbook_teachingplan
+    </sql>
+
+    <select id="selectTextbookTeachingplanList" parameterType="TextbookTeachingplan" resultMap="TextbookTeachingplanResult">
+        <include refid="selectTextbookTeachingplanVo"/>
+        <where>  
+            <if test="Semester != null  and Semester != ''"> and Semester = #{Semester}</if>
+            <if test="ClassID != null "> and ClassID = #{ClassID}</if>
+            <if test="CourseID != null "> and CourseID = #{CourseID}</if>
+            <if test="TeacherID != null "> and TeacherID = #{TeacherID}</if>
+        </where>
+    </select>
+    
+    <select id="selectTextbookTeachingplanByPlanID" parameterType="Long" resultMap="TextbookTeachingplanResult">
+        <include refid="selectTextbookTeachingplanVo"/>
+        where PlanID = #{PlanID}
+    </select>
+
+    <insert id="insertTextbookTeachingplan" parameterType="TextbookTeachingplan" useGeneratedKeys="true" keyProperty="PlanID">
+        insert into textbook_teachingplan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="Semester != null and Semester != ''">Semester,</if>
+            <if test="ClassID != null">ClassID,</if>
+            <if test="CourseID != null">CourseID,</if>
+            <if test="TeacherID != null">TeacherID,</if>
+            <if test="StudentCount != null">StudentCount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="Semester != null and Semester != ''">#{Semester},</if>
+            <if test="ClassID != null">#{ClassID},</if>
+            <if test="CourseID != null">#{CourseID},</if>
+            <if test="TeacherID != null">#{TeacherID},</if>
+            <if test="StudentCount != null">#{StudentCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTextbookTeachingplan" parameterType="TextbookTeachingplan">
+        update textbook_teachingplan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="Semester != null and Semester != ''">Semester = #{Semester},</if>
+            <if test="ClassID != null">ClassID = #{ClassID},</if>
+            <if test="CourseID != null">CourseID = #{CourseID},</if>
+            <if test="TeacherID != null">TeacherID = #{TeacherID},</if>
+            <if test="StudentCount != null">StudentCount = #{StudentCount},</if>
+        </trim>
+        where PlanID = #{PlanID}
+    </update>
+
+    <delete id="deleteTextbookTeachingplanByPlanID" parameterType="Long">
+        delete from textbook_teachingplan where PlanID = #{PlanID}
+    </delete>
+
+    <delete id="deleteTextbookTeachingplanByPlanIDs" parameterType="String">
+        delete from textbook_teachingplan where PlanID in 
+        <foreach item="PlanID" collection="array" open="(" separator="," close=")">
+            #{PlanID}
+        </foreach>
+    </delete>
+</mapper>
