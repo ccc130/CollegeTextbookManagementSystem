@@ -355,6 +355,7 @@ import { deptTreeSelect } from "@/api/system/user"
 import useUserStore from '@/store/modules/user'
 
 const { proxy } = getCurrentInstance()
+const userStore = useUserStore()
 
 const inventoryList = ref([])
 const open = ref(false)
@@ -879,13 +880,12 @@ function submitInboundForm() {
             return;
           }
           
-          updateInventory(updatedInventory).then(() => {
-            proxy.$modal.msgSuccess("入库登记成功");
-            
+          updateInventory(updatedInventory).then(response => {
             // 添加入库日志记录
             const notes = `入库登记 - 供应商: ${inboundForm.value.supplier}, 数量: ${inboundForm.value.quantity}`;
             addLogRecord(inboundForm.value.textbookId, '0', inboundForm.value.quantity, notes);
             
+            proxy.$modal.msgSuccess("入库登记成功");
             inboundOpen.value = false;
             getList();
           }).catch(error => {
@@ -905,13 +905,12 @@ function submitInboundForm() {
           availableQuantity: inboundForm.value.quantity
         };
         
-        addInventory(newInventory).then(() => {
-          proxy.$modal.msgSuccess("入库登记成功");
-          
+        addInventory(newInventory).then(response => {
           // 添加入库日志记录
           const notes = `首次入库登记 - 供应商: ${inboundForm.value.supplier}, 数量: ${inboundForm.value.quantity}`;
           addLogRecord(inboundForm.value.textbookId, '0', inboundForm.value.quantity, notes);
           
+          proxy.$modal.msgSuccess("入库登记成功");
           inboundOpen.value = false;
           getList();
         }).catch(error => {
@@ -956,13 +955,12 @@ function submitOutboundForm() {
             return;
           }
           
-          updateInventory(updatedInventory).then(() => {
-            proxy.$modal.msgSuccess("出库登记成功");
-            
+          updateInventory(updatedInventory).then(response => {
             // 添加出库日志记录
             const notes = `出库登记 - 领用人: ${outboundForm.value.recipient}, 用途: ${outboundForm.value.purpose}, 数量: ${outboundForm.value.quantity}`;
             addLogRecord(outboundForm.value.textbookId, '1', outboundForm.value.quantity, notes);
             
+            proxy.$modal.msgSuccess("出库登记成功");
             outboundOpen.value = false;
             getList();
           }).catch(error => {
@@ -1012,13 +1010,12 @@ function submitIssueForm() {
             return;
           }
           
-          updateInventory(updatedInventory).then(() => {
-            proxy.$modal.msgSuccess("教材领用成功");
-            
+          updateInventory(updatedInventory).then(response => {
             // 添加领用日志记录
             const notes = `教材领用 - 领用人: ${issueForm.value.recipient}, 用途: ${issueForm.value.purpose}, 数量: ${issueForm.value.quantity}`;
             addLogRecord(issueForm.value.textbookId, '1', issueForm.value.quantity, notes, null);
             
+            proxy.$modal.msgSuccess("教材领用成功");
             issueOpen.value = false;
             getList();
           }).catch(error => {

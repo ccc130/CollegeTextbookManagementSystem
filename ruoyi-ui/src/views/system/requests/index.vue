@@ -31,9 +31,9 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="课程名称" prop="courseId">
+      <el-form-item label="课程名称" prop="courseName">
         <el-select 
-          v-model="queryParams.courseId" 
+          v-model="queryParams.courseName" 
           placeholder="请选择课程" 
           clearable 
           filterable
@@ -185,19 +185,14 @@
           {{ getTextbookNameById(scope.row.textbookId) }}
         </template>
       </el-table-column>
-      <el-table-column label="课程名称" align="center" prop="courseId">
+      <el-table-column label="课程名称" align="center" prop="courseName">
         <template #default="scope">
-          {{ getCourseNameById(scope.row.courseId) }}
+          {{ getCourseNameById(scope.row.courseName) }}
         </template>
       </el-table-column>
       <el-table-column label="授课班级" align="center" prop="classId">
         <template #default="scope">
           {{ getClassNameById(scope.row.classId) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="教学计划" align="center" prop="teachingPlanId">
-        <template #default="scope">
-          {{ getTeachingPlanNameById(scope.row.teachingPlanId) }}
         </template>
       </el-table-column>
       <el-table-column label="申请数量" align="center" prop="quantity" />
@@ -280,9 +275,9 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="课程名称" prop="courseId">
+        <el-form-item label="课程名称" prop="courseName">
           <el-select 
-            v-model="form.courseId" 
+            v-model="form.courseName" 
             placeholder="请选择课程" 
             clearable 
             filterable
@@ -293,22 +288,6 @@
               :key="item.courseId"
               :label="item.courseName"
               :value="item.courseId"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="教学计划" prop="teachingPlanId">
-          <el-select 
-            v-model="form.teachingPlanId" 
-            placeholder="请选择教学计划" 
-            clearable 
-            filterable
-            :disabled="isReviewMode"
-          >
-            <el-option
-              v-for="item in teachingPlanOptions"
-              :key="item.planId"
-              :label="`${item.semester} - ${getClassNameById(item.classId)} - ${getCourseNameById(item.courseId)}`"
-              :value="item.planId"
             />
           </el-select>
         </el-form-item>
@@ -468,7 +447,7 @@ const data = reactive({
     pageSize: 10,
     teacherId: hasReviewPermission.value ? null : userStore.id, // 无审核权限时，默认只显示当前用户申请的记录
     textbookId: null,
-    courseId: null,
+    courseid: null,
     classId: null,
     status: null,
     collegeId: null,
@@ -483,7 +462,7 @@ const data = reactive({
     textbookId: [
       { required: true, message: "申请教材不能为空", trigger: "blur" }
     ],
-    courseId: [
+    courseid: [
       { required: true, message: "课程名称不能为空", trigger: "blur" }
     ],
     teachingPlanId: [
@@ -521,12 +500,6 @@ function validateQuantityAgainstInventory(rule, value, callback) {
     return
   }
 
-  // 检查申请数量是否超过可用库存
-  if (quantity > selectedTextbookInventory.value) {
-    callback(new Error(`申请数量不能超过当前可用库存 ${selectedTextbookInventory.value}`))
-    return
-  }
-
   callback()
 }
 
@@ -550,10 +523,16 @@ function getTextbookList() {
 /** 查询课程列表 */
 function getCourseList() {
   listCourse({ pageSize: 1000 }).then(response => {
-    courseOptions.value = response.rows.map(course => ({
-      courseId: course.CourseID,
-      courseName: course.CourseName
-    }))
+    courseOptions.value = response.rows.map(course => {
+      // 兼容不同的字段名
+      return {
+        courseId: course.courseId || course.CourseID || course.id,
+        courseName: course.coursename || course.CourseName || course.name
+      }
+    })
+    console.log('Course options loaded:', courseOptions.value);
+  }).catch(error => {
+    console.error('Failed to load course data:', error);
   })
 }
 
@@ -786,7 +765,13 @@ function submitForm() {
           }
         }
         
-        addRequests(form.value).then(response => {
+        // 添加课程名称到请求数据
+        const requestData = {
+          ...form.value,
+          courseName: getCourseNameById(form.value.courseId)
+        };
+        
+        addRequests(requestData).then(response => {
           proxy.$modal.msgSuccess("新增成功")
           open.value = false
           getList()

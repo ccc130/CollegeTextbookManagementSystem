@@ -48,9 +48,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="teacherId != null">teacher_id,</if>
             <if test="textbookId != null">textbook_id,</if>
-            <if test="courseName != null and courseName != ''">course_name,</if>
+            course_name,
             <if test="classId != null">class_id,</if>
-            <if test="quantity != null and quantity != ''">quantity,</if>
+            quantity,
             <if test="status != null">status,</if>
             <if test="collegeId != null">college_id,</if>
             <if test="submittedAt != null">submitted_at,</if>
@@ -61,9 +61,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="teacherId != null">#{teacherId},</if>
             <if test="textbookId != null">#{textbookId},</if>
-            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            #{courseName},
             <if test="classId != null">#{classId},</if>
-            <if test="quantity != null and quantity != ''">#{quantity},</if>
+            #{quantity},
             <if test="status != null">#{status},</if>
             <if test="collegeId != null">#{collegeId},</if>
             <if test="submittedAt != null">#{submittedAt},</if>
@@ -78,9 +78,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="teacherId != null">teacher_id = #{teacherId},</if>
             <if test="textbookId != null">textbook_id = #{textbookId},</if>
-            <if test="courseName != null and courseName != ''">course_name = #{courseName},</if>
+            course_name = #{courseName},
             <if test="classId != null">class_id = #{classId},</if>
-            <if test="quantity != null and quantity != ''">quantity = #{quantity},</if>
+            quantity = #{quantity},
             <if test="status != null">status = #{status},</if>
             <if test="collegeId != null">college_id = #{collegeId},</if>
             <if test="submittedAt != null">submitted_at = #{submittedAt},</if>
